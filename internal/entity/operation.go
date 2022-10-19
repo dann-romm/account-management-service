@@ -4,7 +4,6 @@ import "time"
 
 type Operation struct {
 	Id            int       `db:"id"`
-	UserId        int       `db:"user_id"`
 	AccountId     int       `db:"account_id"`
 	Amount        int       `db:"amount"`
 	OperationType string    `db:"operation_type"`

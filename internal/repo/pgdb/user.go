@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgx/v4"
-	log "github.com/sirupsen/logrus"
 )
 
 type UserRepo struct {
@@ -29,7 +28,6 @@ func (r *UserRepo) CreateUser(ctx context.Context, user entity.User) (int, error
 		ToSql()
 
 	if err != nil {
-		log.Errorf("UserRepo.CreateUser - r.Builder: %v", err)
 		return 0, fmt.Errorf("UserRepo.CreateUser - r.Builder: %v", err)
 	}
 
@@ -39,10 +37,9 @@ func (r *UserRepo) CreateUser(ctx context.Context, user entity.User) (int, error
 		var pgErr *pgconn.PgError
 		if ok := errors.As(err, &pgErr); ok {
 			if pgErr.Code == "23505" {
-				return 0, repoerrs.ErrUserAlreadyExists
+				return 0, repoerrs.ErrAlreadyExists
 			}
 		}
-		log.Errorf("UserRepo.CreateUser - r.Pool.QueryRow: %v", err)
 		return 0, fmt.Errorf("UserRepo.CreateUser - r.Pool.QueryRow: %v", err)
 	}
 
@@ -57,7 +54,6 @@ func (r *UserRepo) GetUserByUsernameAndPassword(ctx context.Context, username, p
 		ToSql()
 
 	if err != nil {
-		log.Errorf("UserRepo.GetUserByUsernameAndPassword - r.Builder: %v", err)
 		return entity.User{}, fmt.Errorf("UserRepo.GetUserByUsernameAndPassword - r.Builder: %v", err)
 	}
 
@@ -69,9 +65,8 @@ func (r *UserRepo) GetUserByUsernameAndPassword(ctx context.Context, username, p
 		&user.CreatedAt,
 	)
 	if err != nil {
-		log.Errorf("UserRepo.GetUserByUsernameAndPassword - r.Pool.QueryRow: %v", err)
-		if err == pgx.ErrNoRows {
-			return entity.User{}, repoerrs.ErrUserNotFound
+		if errors.Is(err, pgx.ErrNoRows) {
+			return entity.User{}, repoerrs.ErrNotFound
 		}
 		return entity.User{}, fmt.Errorf("UserRepo.GetUserByUsernameAndPassword - r.Pool.QueryRow: %v", err)
 	}
@@ -87,7 +82,6 @@ func (r *UserRepo) GetUserById(ctx context.Context, id int) (entity.User, error)
 		ToSql()
 
 	if err != nil {
-		log.Errorf("UserRepo.GetUserById - r.Builder: %v", err)
 		return entity.User{}, fmt.Errorf("UserRepo.GetUserById - r.Builder: %v", err)
 	}
 
@@ -99,9 +93,8 @@ func (r *UserRepo) GetUserById(ctx context.Context, id int) (entity.User, error)
 		&user.CreatedAt,
 	)
 	if err != nil {
-		log.Errorf("UserRepo.GetUserById - r.Pool.QueryRow: %v", err)
-		if err == pgx.ErrNoRows {
-			return entity.User{}, repoerrs.ErrUserNotFound
+		if errors.Is(err, pgx.ErrNoRows) {
+			return entity.User{}, repoerrs.ErrNotFound
 		}
 		return entity.User{}, fmt.Errorf("UserRepo.GetUserById - r.Pool.QueryRow: %v", err)
 	}
@@ -117,7 +110,6 @@ func (r *UserRepo) GetUserByUsername(ctx context.Context, username string) (enti
 		ToSql()
 
 	if err != nil {
-		log.Errorf("UserRepo.GetUserByUsername - r.Builder: %v", err)
 		return entity.User{}, fmt.Errorf("UserRepo.GetUserByUsername - r.Builder: %v", err)
 	}
 
@@ -129,9 +121,8 @@ func (r *UserRepo) GetUserByUsername(ctx context.Context, username string) (enti
 		&user.CreatedAt,
 	)
 	if err != nil {
-		log.Errorf("UserRepo.GetUserByUsername - r.Pool.QueryRow: %v", err)
-		if err == pgx.ErrNoRows {
-			return entity.User{}, repoerrs.ErrUserNotFound
+		if errors.Is(err, pgx.ErrNoRows) {
+			return entity.User{}, repoerrs.ErrNotFound
 		}
 		return entity.User{}, fmt.Errorf("UserRepo.GetUserByUsername - r.Pool.QueryRow: %v", err)
 	}

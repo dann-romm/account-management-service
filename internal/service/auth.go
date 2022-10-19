@@ -50,7 +50,7 @@ func (s *AuthService) CreateUser(ctx context.Context, input AuthCreateUserInput)
 	}
 
 	userId, err := s.userRepo.CreateUser(ctx, user)
-	if err == repoerrs.ErrUserAlreadyExists {
+	if err == repoerrs.ErrAlreadyExists {
 		return 0, ErrUserAlreadyExists
 	}
 	if err != nil {
@@ -63,7 +63,7 @@ func (s *AuthService) CreateUser(ctx context.Context, input AuthCreateUserInput)
 func (s *AuthService) GenerateToken(ctx context.Context, input AuthGenerateTokenInput) (string, error) {
 	// get user from DB
 	user, err := s.userRepo.GetUserByUsernameAndPassword(ctx, input.Username, s.passwordHasher.Hash(input.Password))
-	if err == repoerrs.ErrUserNotFound {
+	if err == repoerrs.ErrNotFound {
 		return "", ErrUserNotFound
 	}
 	if err != nil {

@@ -34,7 +34,6 @@ create table reservations
 create table operations
 (
     id             serial primary key,
-    user_id        int          not null,
     account_id     int          not null,
     amount         int          not null,
     operation_type varchar(255) not null,
@@ -42,6 +41,5 @@ create table operations
     product_id     int                   default null,
     order_id       int                   default null,
     description    varchar(255)          default null,
-    foreign key (user_id) references users (id),
     foreign key (account_id) references accounts (id)
 );
