@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/Masterminds/squirrel"
-	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"log"
 	"time"
 )
@@ -15,13 +17,26 @@ const (
 	defaultConnTimeout  = time.Second
 )
 
+type PgxPool interface {
+	Close()
+	Acquire(ctx context.Context) (*pgxpool.Conn, error)
+	Exec(ctx context.Context, sql string, arguments ...any) (pgconn.CommandTag, error)
+	Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error)
+	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
+	SendBatch(ctx context.Context, b *pgx.Batch) pgx.BatchResults
+	Begin(ctx context.Context) (pgx.Tx, error)
+	BeginTx(ctx context.Context, txOptions pgx.TxOptions) (pgx.Tx, error)
+	CopyFrom(ctx context.Context, tableName pgx.Identifier, columnNames []string, rowSrc pgx.CopyFromSource) (int64, error)
+	Ping(ctx context.Context) error
+}
+
 type Postgres struct {
 	maxPoolSize  int
 	connAttempts int
 	connTimeout  time.Duration
 
 	Builder squirrel.StatementBuilderType
-	Pool    *pgxpool.Pool
+	Pool    PgxPool
 }
 
 func New(url string, opts ...Option) (*Postgres, error) {
@@ -45,7 +60,7 @@ func New(url string, opts ...Option) (*Postgres, error) {
 	poolConfig.MaxConns = int32(pg.maxPoolSize)
 
 	for pg.connAttempts > 0 {
-		pg.Pool, err = pgxpool.ConnectConfig(context.Background(), poolConfig)
+		pg.Pool, err = pgxpool.NewWithConfig(context.Background(), poolConfig)
 		if err == nil {
 			break
 		}
