@@ -30,18 +30,22 @@ type Product interface {
 type Reservation interface {
 	CreateReservation(ctx context.Context, reservation entity.Reservation) (int, error)
 	GetReservationById(ctx context.Context, id int) (entity.Reservation, error)
-	DeleteReservationById(ctx context.Context, id int) error
-	DeleteReservationByOrderId(ctx context.Context, orderId int) error
+	RefundReservationById(ctx context.Context, id int) error
+	RevenueReservationById(ctx context.Context, id int) error
 }
 
 type Repositories struct {
 	User
 	Account
+	Product
+	Reservation
 }
 
 func NewRepositories(pg *postgres.Postgres) *Repositories {
 	return &Repositories{
-		User:    pgdb.NewUserRepo(pg),
-		Account: pgdb.NewAccountRepo(pg),
+		User:        pgdb.NewUserRepo(pg),
+		Account:     pgdb.NewAccountRepo(pg),
+		Product:     pgdb.NewProductRepo(pg),
+		Reservation: pgdb.NewReservationRepo(pg),
 	}
 }

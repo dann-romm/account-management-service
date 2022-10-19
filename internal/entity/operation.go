@@ -21,7 +21,7 @@ const (
 	OperationTypeWithdraw     = "withdraw"
 	OperationTypeTransferFrom = "transfer_from"
 	OperationTypeTransferTo   = "transfer_to"
-	OpeartionTypeReservation  = "reservation"
+	OperationTypeReservation  = "reservation"
 	OperationTypeRevenue      = "revenue"
-	OpeartionTypeRefund       = "refund"
+	OperationTypeRefund       = "refund"
 )
