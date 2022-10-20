@@ -9,8 +9,6 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.15.2
 	github.com/golang/mock v1.6.0
 	github.com/ilyakaznacheev/cleanenv v1.4.0
-	github.com/jackc/pgconn v1.13.0
-	github.com/jackc/pgx/v4 v4.17.2
 	github.com/jackc/pgx/v5 v5.0.3
 	github.com/labstack/echo/v4 v4.9.1
 	github.com/pashagolub/pgxmock/v2 v2.1.0

@@ -6,7 +6,7 @@ import (
 	"context"
 	"errors"
 	"github.com/Masterminds/squirrel"
-	"github.com/jackc/pgconn"
+	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/pashagolub/pgxmock/v2"
 	"github.com/stretchr/testify/assert"
 	"testing"
