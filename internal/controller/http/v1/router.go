@@ -27,6 +27,7 @@ func NewRouter(handler *echo.Echo, services *service.Services) {
 	{
 		newAccountRoutes(v1.Group("/accounts"), services.Account)
 		newReservationRoutes(v1.Group("/reservations"), services.Reservation)
+		newProductRoutes(v1.Group("/products"), services.Product)
 	}
 }
 
