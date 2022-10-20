@@ -26,11 +26,6 @@ type Auth interface {
 	ParseToken(token string) (int, error)
 }
 
-type AccountCreateInput struct {
-	Id      int
-	Balance int
-}
-
 type AccountDepositInput struct {
 	Id     int
 	Amount int
@@ -48,7 +43,7 @@ type AccountTransferInput struct {
 }
 
 type Account interface {
-	CreateAccount(ctx context.Context, input AccountCreateInput) (int, error)
+	CreateAccount(ctx context.Context) (int, error)
 	Deposit(ctx context.Context, input AccountDepositInput) error
 	Withdraw(ctx context.Context, input AccountWithdrawInput) error
 	Transfer(ctx context.Context, input AccountTransferInput) error

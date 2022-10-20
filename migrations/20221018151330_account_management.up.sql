@@ -8,7 +8,7 @@ create table users
 
 create table accounts
 (
-    id         int primary key,
+    id         serial primary key,
     balance    int       not null default 0,
     created_at timestamp not null default now()
 );

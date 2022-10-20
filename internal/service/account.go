@@ -1,7 +1,6 @@
 package service
 
 import (
-	"account-management-service/internal/entity"
 	"account-management-service/internal/repo"
 	"account-management-service/internal/repo/repoerrs"
 	"context"
@@ -15,13 +14,8 @@ func NewAccountService(accountRepo repo.Account) *AccountService {
 	return &AccountService{accountRepo: accountRepo}
 }
 
-func (s *AccountService) CreateAccount(ctx context.Context, input AccountCreateInput) (int, error) {
-	account := entity.Account{
-		Id:      input.Id,
-		Balance: input.Balance,
-	}
-
-	id, err := s.accountRepo.CreateAccount(ctx, account)
+func (s *AccountService) CreateAccount(ctx context.Context) (int, error) {
+	id, err := s.accountRepo.CreateAccount(ctx)
 	if err != nil {
 		if err == repoerrs.ErrAlreadyExists {
 			return 0, ErrAccountAlreadyExists

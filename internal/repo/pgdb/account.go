@@ -10,6 +10,7 @@ import (
 	"github.com/Masterminds/squirrel"
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgx/v4"
+	log "github.com/sirupsen/logrus"
 )
 
 type AccountRepo struct {
@@ -22,15 +23,17 @@ func NewAccountRepo(pg *postgres.Postgres) *AccountRepo {
 
 // TODO: create with provided account id and balance
 
-func (r *AccountRepo) CreateAccount(ctx context.Context, account entity.Account) (int, error) {
-	sql, args, _ := r.Builder.
-		Insert("account").
+func (r *AccountRepo) CreateAccount(ctx context.Context) (int, error) {
+	sql, args, err := r.Builder.
+		Insert("accounts").
+		Values(squirrel.Expr("DEFAULT")).
 		Suffix("RETURNING id").
 		ToSql()
 
 	var id int
-	err := r.Pool.QueryRow(ctx, sql, args...).Scan(&id)
+	err = r.Pool.QueryRow(ctx, sql, args...).Scan(&id)
 	if err != nil {
+		log.Debugf("err: %v", err)
 		var pgErr *pgconn.PgError
 		if ok := errors.As(err, &pgErr); ok {
 			if pgErr.Code == "23505" {
@@ -46,7 +49,7 @@ func (r *AccountRepo) CreateAccount(ctx context.Context, account entity.Account)
 func (r *AccountRepo) GetAccountById(ctx context.Context, id int) (entity.Account, error) {
 	sql, args, _ := r.Builder.
 		Select("*").
-		From("account").
+		From("accounts").
 		Where("id = ?", id).
 		ToSql()
 
@@ -74,7 +77,7 @@ func (r *AccountRepo) Deposit(ctx context.Context, id, amount int) error {
 	defer func() { _ = tx.Rollback(ctx) }()
 
 	sql, args, _ := r.Builder.
-		Update("account").
+		Update("accounts").
 		Set("balance", squirrel.Expr("balance + ?", amount)).
 		Where("id = ?", id).
 		ToSql()
@@ -111,7 +114,7 @@ func (r *AccountRepo) Withdraw(ctx context.Context, id, amount int) error {
 	defer func() { _ = tx.Rollback(ctx) }()
 
 	sql, args, _ := r.Builder.
-		Update("account").
+		Update("accounts").
 		Set("balance", squirrel.Expr("balance - ?", amount)).
 		Where("id = ?", id).
 		ToSql()
@@ -148,7 +151,7 @@ func (r *AccountRepo) Transfer(ctx context.Context, from, to, amount int) error 
 	defer func() { _ = tx.Rollback(ctx) }()
 
 	sql, args, _ := r.Builder.
-		Update("account").
+		Update("accounts").
 		Set("balance", squirrel.Expr("balance - ?", amount)).
 		Where("id = ?", from).
 		ToSql()
@@ -159,7 +162,7 @@ func (r *AccountRepo) Transfer(ctx context.Context, from, to, amount int) error 
 	}
 
 	sql, args, _ = r.Builder.
-		Update("account").
+		Update("accounts").
 		Set("balance", squirrel.Expr("balance + ?", amount)).
 		Where("id = ?", to).
 		ToSql()

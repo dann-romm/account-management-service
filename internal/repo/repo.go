@@ -15,7 +15,7 @@ type User interface {
 }
 
 type Account interface {
-	CreateAccount(ctx context.Context, account entity.Account) (int, error)
+	CreateAccount(ctx context.Context) (int, error)
 	GetAccountById(ctx context.Context, id int) (entity.Account, error)
 	Deposit(ctx context.Context, id, amount int) error
 	Withdraw(ctx context.Context, id, amount int) error
