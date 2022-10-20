@@ -17,7 +17,7 @@ func NewProductRepo(pg *postgres.Postgres) *ProductRepo {
 
 func (p ProductRepo) CreateProduct(ctx context.Context, name string) (int, error) {
 	sql, args, _ := p.Builder.
-		Insert("product").
+		Insert("products").
 		Columns("name").
 		Values(name).
 		Suffix("RETURNING id").
@@ -35,7 +35,7 @@ func (p ProductRepo) CreateProduct(ctx context.Context, name string) (int, error
 func (p ProductRepo) GetProductById(ctx context.Context, id int) (entity.Product, error) {
 	sql, args, _ := p.Builder.
 		Select("*").
-		From("product").
+		From("products").
 		Where("id = ?", id).
 		ToSql()
 
