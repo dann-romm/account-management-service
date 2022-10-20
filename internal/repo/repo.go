@@ -15,7 +15,7 @@ type User interface {
 }
 
 type Account interface {
-	CreateAccount(ctx context.Context) (int, error)
+	CreateAccount(ctx context.Context, account entity.Account) (int, error)
 	GetAccountById(ctx context.Context, id int) (entity.Account, error)
 	Deposit(ctx context.Context, id, amount int) error
 	Withdraw(ctx context.Context, id, amount int) error
@@ -31,7 +31,9 @@ type Reservation interface {
 	CreateReservation(ctx context.Context, reservation entity.Reservation) (int, error)
 	GetReservationById(ctx context.Context, id int) (entity.Reservation, error)
 	RefundReservationById(ctx context.Context, id int) error
+	RefundReservationByOrderId(ctx context.Context, id int) error
 	RevenueReservationById(ctx context.Context, id int) error
+	RevenueReservationByOrderId(ctx context.Context, orderId int) error
 }
 
 type Repositories struct {

@@ -16,19 +16,15 @@ func NewProductRepo(pg *postgres.Postgres) *ProductRepo {
 }
 
 func (p ProductRepo) CreateProduct(ctx context.Context, name string) (int, error) {
-	sql, args, err := p.Builder.
+	sql, args, _ := p.Builder.
 		Insert("product").
 		Columns("name").
 		Values(name).
 		Suffix("RETURNING id").
 		ToSql()
 
-	if err != nil {
-		return 0, fmt.Errorf("ProductRepo.CreateProduct - p.Builder: %v", err)
-	}
-
 	var id int
-	err = p.Pool.QueryRow(ctx, sql, args...).Scan(&id)
+	err := p.Pool.QueryRow(ctx, sql, args...).Scan(&id)
 	if err != nil {
 		return 0, fmt.Errorf("ProductRepo.CreateProduct - p.Pool.QueryRow: %v", err)
 	}
@@ -37,18 +33,14 @@ func (p ProductRepo) CreateProduct(ctx context.Context, name string) (int, error
 }
 
 func (p ProductRepo) GetProductById(ctx context.Context, id int) (entity.Product, error) {
-	sql, args, err := p.Builder.
+	sql, args, _ := p.Builder.
 		Select("*").
 		From("product").
 		Where("id = ?", id).
 		ToSql()
 
-	if err != nil {
-		return entity.Product{}, fmt.Errorf("ProductRepo.GetProductById - p.Builder: %v", err)
-	}
-
 	var product entity.Product
-	err = p.Pool.QueryRow(ctx, sql, args...).Scan(
+	err := p.Pool.QueryRow(ctx, sql, args...).Scan(
 		&product.Id,
 		&product.Name,
 	)
