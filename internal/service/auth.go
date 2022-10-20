@@ -6,6 +6,7 @@ import (
 	"account-management-service/internal/repo/repoerrs"
 	"account-management-service/pkg/hasher"
 	"context"
+	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt"
 	log "github.com/sirupsen/logrus"
@@ -41,7 +42,7 @@ func (s *AuthService) CreateUser(ctx context.Context, input AuthCreateUserInput)
 
 	userId, err := s.userRepo.CreateUser(ctx, user)
 	if err != nil {
-		if err == repoerrs.ErrAlreadyExists {
+		if errors.Is(err, repoerrs.ErrAlreadyExists) {
 			return 0, ErrUserAlreadyExists
 		}
 		log.Errorf("AuthService.CreateUser - c.userRepo.CreateUser: %v", err)
@@ -54,7 +55,7 @@ func (s *AuthService) GenerateToken(ctx context.Context, input AuthGenerateToken
 	// get user from DB
 	user, err := s.userRepo.GetUserByUsernameAndPassword(ctx, input.Username, s.passwordHasher.Hash(input.Password))
 	if err != nil {
-		if err == repoerrs.ErrNotFound {
+		if errors.Is(err, repoerrs.ErrNotFound) {
 			return "", ErrUserNotFound
 		}
 		log.Errorf("AuthService.GenerateToken: cannot get user: %v", err)
