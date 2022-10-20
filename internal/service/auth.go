@@ -24,16 +24,6 @@ type AuthService struct {
 	tokenTTL       time.Duration
 }
 
-var (
-	ErrUserAlreadyExists = fmt.Errorf("user already exists")
-	ErrCannotCreateUser  = fmt.Errorf("cannot create user")
-	ErrCannotGetUser     = fmt.Errorf("cannot get user")
-	ErrCannotSignToken   = fmt.Errorf("cannot sign token")
-	ErrCannotParseToken  = fmt.Errorf("cannot parse token")
-	ErrTokenClaimsType   = fmt.Errorf("token claims are not of type TokenClaims")
-	ErrUserNotFound      = fmt.Errorf("user not found")
-)
-
 func NewAuthService(userRepo repo.User, passwordHasher hasher.PasswordHasher, signKey string, tokenTTL time.Duration) *AuthService {
 	return &AuthService{
 		userRepo:       userRepo,
@@ -50,10 +40,10 @@ func (s *AuthService) CreateUser(ctx context.Context, input AuthCreateUserInput)
 	}
 
 	userId, err := s.userRepo.CreateUser(ctx, user)
-	if err == repoerrs.ErrAlreadyExists {
-		return 0, ErrUserAlreadyExists
-	}
 	if err != nil {
+		if err == repoerrs.ErrAlreadyExists {
+			return 0, ErrUserAlreadyExists
+		}
 		log.Errorf("AuthService.CreateUser - c.userRepo.CreateUser: %v", err)
 		return 0, ErrCannotCreateUser
 	}
@@ -63,10 +53,10 @@ func (s *AuthService) CreateUser(ctx context.Context, input AuthCreateUserInput)
 func (s *AuthService) GenerateToken(ctx context.Context, input AuthGenerateTokenInput) (string, error) {
 	// get user from DB
 	user, err := s.userRepo.GetUserByUsernameAndPassword(ctx, input.Username, s.passwordHasher.Hash(input.Password))
-	if err == repoerrs.ErrNotFound {
-		return "", ErrUserNotFound
-	}
 	if err != nil {
+		if err == repoerrs.ErrNotFound {
+			return "", ErrUserNotFound
+		}
 		log.Errorf("AuthService.GenerateToken: cannot get user: %v", err)
 		return "", ErrCannotGetUser
 	}
@@ -105,7 +95,7 @@ func (s *AuthService) ParseToken(accessToken string) (int, error) {
 
 	claims, ok := token.Claims.(*TokenClaims)
 	if !ok {
-		return 0, ErrTokenClaimsType
+		return 0, ErrCannotParseToken
 	}
 
 	return claims.UserId, nil
