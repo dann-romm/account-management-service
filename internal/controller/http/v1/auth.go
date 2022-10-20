@@ -29,7 +29,7 @@ func (r *authRoutes) signUp(c echo.Context) error {
 	var input signUpInput
 
 	if err := c.Bind(&input); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, ErrInvalidRequestBody.Error())
+		newErrorResponse(c, http.StatusBadRequest, "invalid request body")
 		return err
 	}
 
@@ -42,16 +42,16 @@ func (r *authRoutes) signUp(c echo.Context) error {
 		Username: input.Username,
 		Password: input.Password,
 	})
-	if err == service.ErrUserAlreadyExists {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
-		return err
-	}
 	if err != nil {
+		if err == service.ErrUserAlreadyExists {
+			newErrorResponse(c, http.StatusBadRequest, err.Error())
+			return err
+		}
 		newErrorResponse(c, http.StatusInternalServerError, "internal server error")
 		return err
 	}
 
-	return c.JSON(http.StatusOK, map[string]interface{}{
+	return c.JSON(http.StatusCreated, map[string]interface{}{
 		"id": id,
 	})
 }
@@ -66,7 +66,7 @@ func (r *authRoutes) signIn(c echo.Context) error {
 	var input signInInput
 
 	if err := c.Bind(&input); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, ErrInvalidRequestBody.Error())
+		newErrorResponse(c, http.StatusBadRequest, "invalid request body")
 		return err
 	}
 
@@ -79,11 +79,11 @@ func (r *authRoutes) signIn(c echo.Context) error {
 		Username: input.Username,
 		Password: input.Password,
 	})
-	if err == service.ErrUserNotFound {
-		newErrorResponse(c, http.StatusBadRequest, "invalid username or password")
-		return err
-	}
 	if err != nil {
+		if err == service.ErrUserNotFound {
+			newErrorResponse(c, http.StatusBadRequest, "invalid username or password")
+			return err
+		}
 		newErrorResponse(c, http.StatusInternalServerError, "internal server error")
 		return err
 	}

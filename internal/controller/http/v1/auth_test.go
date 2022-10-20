@@ -21,7 +21,7 @@ func TestAuthRoutes_SignUp(t *testing.T) {
 		input service.AuthCreateUserInput
 	}
 
-	type MockBehaviour func(s *mocks.MockAuth, args args)
+	type MockBehaviour func(m *mocks.MockAuth, args args)
 
 	testCases := []struct {
 		name            string
@@ -41,8 +41,8 @@ func TestAuthRoutes_SignUp(t *testing.T) {
 				},
 			},
 			inputBody: `{"username":"test","password":"Qwerty!1"}`,
-			mockBehaviour: func(s *mocks.MockAuth, args args) {
-				s.EXPECT().CreateUser(args.ctx, args.input).Return(1, nil)
+			mockBehaviour: func(m *mocks.MockAuth, args args) {
+				m.EXPECT().CreateUser(args.ctx, args.input).Return(1, nil)
 			},
 			wantStatusCode:  200,
 			wantRequestBody: `{"id":1}` + "\n",
@@ -51,7 +51,7 @@ func TestAuthRoutes_SignUp(t *testing.T) {
 			name:            "Invalid password: not provided",
 			args:            args{},
 			inputBody:       `{"username":"test"}`,
-			mockBehaviour:   func(s *mocks.MockAuth, args args) {},
+			mockBehaviour:   func(m *mocks.MockAuth, args args) {},
 			wantStatusCode:  400,
 			wantRequestBody: `{"message":"field password is required"}` + "\n",
 		},
@@ -59,7 +59,7 @@ func TestAuthRoutes_SignUp(t *testing.T) {
 			name:            "Invalid password: too short",
 			args:            args{},
 			inputBody:       `{"username":"test","password":"Qw!1"}`,
-			mockBehaviour:   func(s *mocks.MockAuth, args args) {},
+			mockBehaviour:   func(m *mocks.MockAuth, args args) {},
 			wantStatusCode:  400,
 			wantRequestBody: `{"message":"field password must be between 8 and 32 characters"}` + "\n",
 		},
@@ -67,7 +67,7 @@ func TestAuthRoutes_SignUp(t *testing.T) {
 			name:            "Invalid password: too long",
 			args:            args{},
 			inputBody:       `{"username":"test","password":"Qwerty!123456789012345678901234567890"}`,
-			mockBehaviour:   func(s *mocks.MockAuth, args args) {},
+			mockBehaviour:   func(m *mocks.MockAuth, args args) {},
 			wantStatusCode:  400,
 			wantRequestBody: `{"message":"field password must be between 8 and 32 characters"}` + "\n",
 		},
@@ -75,7 +75,7 @@ func TestAuthRoutes_SignUp(t *testing.T) {
 			name:            "Invalid password: no uppercase",
 			args:            args{},
 			inputBody:       `{"username":"test","password":"qwerty!1"}`,
-			mockBehaviour:   func(s *mocks.MockAuth, args args) {},
+			mockBehaviour:   func(m *mocks.MockAuth, args args) {},
 			wantStatusCode:  400,
 			wantRequestBody: `{"message":"field password must contain at least 1 uppercase letter(s)"}` + "\n",
 		},
@@ -83,7 +83,7 @@ func TestAuthRoutes_SignUp(t *testing.T) {
 			name:            "Invalid password: no lowercase",
 			args:            args{},
 			inputBody:       `{"username":"test","password":"QWERTY!1"}`,
-			mockBehaviour:   func(s *mocks.MockAuth, args args) {},
+			mockBehaviour:   func(m *mocks.MockAuth, args args) {},
 			wantStatusCode:  400,
 			wantRequestBody: `{"message":"field password must contain at least 1 lowercase letter(s)"}` + "\n",
 		},
@@ -91,7 +91,7 @@ func TestAuthRoutes_SignUp(t *testing.T) {
 			name:            "Invalid password: no digits",
 			args:            args{},
 			inputBody:       `{"username":"test","password":"Qwerty!!"}`,
-			mockBehaviour:   func(s *mocks.MockAuth, args args) {},
+			mockBehaviour:   func(m *mocks.MockAuth, args args) {},
 			wantStatusCode:  400,
 			wantRequestBody: `{"message":"field password must contain at least 1 digit(s)"}` + "\n",
 		},
@@ -99,7 +99,7 @@ func TestAuthRoutes_SignUp(t *testing.T) {
 			name:            "Invalid password: no special characters",
 			args:            args{},
 			inputBody:       `{"username":"test","password":"Qwerty11"}`,
-			mockBehaviour:   func(s *mocks.MockAuth, args args) {},
+			mockBehaviour:   func(m *mocks.MockAuth, args args) {},
 			wantStatusCode:  400,
 			wantRequestBody: `{"message":"field password must contain at least 1 special character(s)"}` + "\n",
 		},
@@ -107,7 +107,7 @@ func TestAuthRoutes_SignUp(t *testing.T) {
 			name:            "Invalid username: not provided",
 			args:            args{},
 			inputBody:       `{"password":"Qwerty!1"}`,
-			mockBehaviour:   func(s *mocks.MockAuth, args args) {},
+			mockBehaviour:   func(m *mocks.MockAuth, args args) {},
 			wantStatusCode:  400,
 			wantRequestBody: `{"message":"field username is required"}` + "\n",
 		},
@@ -115,7 +115,7 @@ func TestAuthRoutes_SignUp(t *testing.T) {
 			name:            "Invalid username: too short",
 			args:            args{},
 			inputBody:       `{"username":"t","password":"Qwerty!1"}`,
-			mockBehaviour:   func(s *mocks.MockAuth, args args) {},
+			mockBehaviour:   func(m *mocks.MockAuth, args args) {},
 			wantStatusCode:  400,
 			wantRequestBody: `{"message":"field username must be at least 4 characters"}` + "\n",
 		},
@@ -123,7 +123,7 @@ func TestAuthRoutes_SignUp(t *testing.T) {
 			name:            "Invalid username: too long",
 			args:            args{},
 			inputBody:       `{"username":"testtesttesttesttesttesttesttesttest","password":"Qwerty!1"}`,
-			mockBehaviour:   func(s *mocks.MockAuth, args args) {},
+			mockBehaviour:   func(m *mocks.MockAuth, args args) {},
 			wantStatusCode:  400,
 			wantRequestBody: `{"message":"field username must be at most 32 characters"}` + "\n",
 		},
@@ -131,7 +131,7 @@ func TestAuthRoutes_SignUp(t *testing.T) {
 			name:            "Invalid request body",
 			args:            args{},
 			inputBody:       `{"username" test","password":"Qwerty!1"`,
-			mockBehaviour:   func(s *mocks.MockAuth, args args) {},
+			mockBehaviour:   func(m *mocks.MockAuth, args args) {},
 			wantStatusCode:  400,
 			wantRequestBody: `{"message":"invalid request body"}` + "\n",
 		},
@@ -145,8 +145,8 @@ func TestAuthRoutes_SignUp(t *testing.T) {
 				},
 			},
 			inputBody: `{"username":"test","password":"Qwerty!1"}`,
-			mockBehaviour: func(s *mocks.MockAuth, args args) {
-				s.EXPECT().CreateUser(args.ctx, args.input).Return(0, service.ErrUserAlreadyExists)
+			mockBehaviour: func(m *mocks.MockAuth, args args) {
+				m.EXPECT().CreateUser(args.ctx, args.input).Return(0, service.ErrUserAlreadyExists)
 			},
 			wantStatusCode:  400,
 			wantRequestBody: `{"message":"user already exists"}` + "\n",
@@ -161,8 +161,8 @@ func TestAuthRoutes_SignUp(t *testing.T) {
 				},
 			},
 			inputBody: `{"username":"test","password":"Qwerty!1"}`,
-			mockBehaviour: func(s *mocks.MockAuth, args args) {
-				s.EXPECT().CreateUser(args.ctx, args.input).Return(0, errors.New("some error"))
+			mockBehaviour: func(m *mocks.MockAuth, args args) {
+				m.EXPECT().CreateUser(args.ctx, args.input).Return(0, errors.New("some error"))
 			},
 			wantStatusCode:  500,
 			wantRequestBody: `{"message":"internal server error"}` + "\n",
@@ -207,7 +207,7 @@ func TestAuthRoutes_SignIn(t *testing.T) {
 		input service.AuthGenerateTokenInput
 	}
 
-	type mockBehaviour func(s *mocks.MockAuth, args args)
+	type mockBehaviour func(m *mocks.MockAuth, args args)
 
 	testCases := []struct {
 		name            string
@@ -227,8 +227,8 @@ func TestAuthRoutes_SignIn(t *testing.T) {
 				},
 			},
 			inputBody: `{"username":"test","password":"Qwerty!1"}`,
-			mockBehaviour: func(s *mocks.MockAuth, args args) {
-				s.EXPECT().GenerateToken(args.ctx, args.input).Return("token", nil)
+			mockBehaviour: func(m *mocks.MockAuth, args args) {
+				m.EXPECT().GenerateToken(args.ctx, args.input).Return("token", nil)
 			},
 			wantStatusCode:  200,
 			wantRequestBody: `{"token":"token"}` + "\n",
@@ -237,7 +237,7 @@ func TestAuthRoutes_SignIn(t *testing.T) {
 			name:            "Invalid username: not provided",
 			args:            args{},
 			inputBody:       `{"password":"Qwerty!1"}`,
-			mockBehaviour:   func(s *mocks.MockAuth, args args) {},
+			mockBehaviour:   func(m *mocks.MockAuth, args args) {},
 			wantStatusCode:  400,
 			wantRequestBody: `{"message":"field username is required"}` + "\n",
 		},
@@ -245,7 +245,7 @@ func TestAuthRoutes_SignIn(t *testing.T) {
 			name:            "Invalid password: not provided",
 			args:            args{},
 			inputBody:       `{"username":"test"}`,
-			mockBehaviour:   func(s *mocks.MockAuth, args args) {},
+			mockBehaviour:   func(m *mocks.MockAuth, args args) {},
 			wantStatusCode:  400,
 			wantRequestBody: `{"message":"field password is required"}` + "\n",
 		},
@@ -259,8 +259,8 @@ func TestAuthRoutes_SignIn(t *testing.T) {
 				},
 			},
 			inputBody: `{"username":"test","password":"Qwerty!1"}`,
-			mockBehaviour: func(s *mocks.MockAuth, args args) {
-				s.EXPECT().GenerateToken(args.ctx, args.input).Return("", service.ErrUserNotFound)
+			mockBehaviour: func(m *mocks.MockAuth, args args) {
+				m.EXPECT().GenerateToken(args.ctx, args.input).Return("", service.ErrUserNotFound)
 			},
 			wantStatusCode:  400,
 			wantRequestBody: `{"message":"invalid username or password"}` + "\n",
@@ -275,8 +275,8 @@ func TestAuthRoutes_SignIn(t *testing.T) {
 				},
 			},
 			inputBody: `{"username":"test","password":"Qwerty!1"}`,
-			mockBehaviour: func(s *mocks.MockAuth, args args) {
-				s.EXPECT().GenerateToken(args.ctx, args.input).Return("", errors.New("some error"))
+			mockBehaviour: func(m *mocks.MockAuth, args args) {
+				m.EXPECT().GenerateToken(args.ctx, args.input).Return("", errors.New("some error"))
 			},
 			wantStatusCode:  500,
 			wantRequestBody: `{"message":"internal server error"}` + "\n",
@@ -285,7 +285,7 @@ func TestAuthRoutes_SignIn(t *testing.T) {
 			name:            "Invalid request body",
 			args:            args{},
 			inputBody:       `{qw"qwdf)00)))`,
-			mockBehaviour:   func(s *mocks.MockAuth, args args) {},
+			mockBehaviour:   func(m *mocks.MockAuth, args args) {},
 			wantStatusCode:  400,
 			wantRequestBody: `{"message":"invalid request body"}` + "\n",
 		},
