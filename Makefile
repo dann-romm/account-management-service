@@ -40,13 +40,13 @@ migrate-down: ### migration down
 test: ### run test
 	go test -v ./...
 
-coverage-html: ### run test with coverage and open html report
+cover-html: ### run test with coverage and open html report
 	go test -coverprofile=coverage.out ./...
 	go tool cover -html=coverage.out
 	rm coverage.out
 .PHONY: coverage-html
 
-coverage: ### run test with coverage
+cover: ### run test with coverage
 	go test -coverprofile=coverage.out ./...
 	go tool cover -func=coverage.out
 	rm coverage.out

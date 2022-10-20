@@ -8,7 +8,7 @@ create table users
 
 create table accounts
 (
-    id         serial primary key,
+    id         int primary key,
     balance    int       not null default 0,
     created_at timestamp not null default now()
 );
@@ -21,12 +21,12 @@ create table products
 
 create table reservations
 (
-    id          serial primary key,
-    account_id  int       not null,
-    product_id  int       not null,
-    order_id    int       not null unique,
-    amount      int       not null,
-    created_at  timestamp not null default now(),
+    id         serial primary key,
+    account_id int       not null,
+    product_id int       not null,
+    order_id   int       not null unique,
+    amount     int       not null,
+    created_at timestamp not null default now(),
     foreign key (account_id) references accounts (id),
     foreign key (product_id) references products (id)
 );
