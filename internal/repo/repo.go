@@ -30,9 +30,7 @@ type Product interface {
 type Reservation interface {
 	CreateReservation(ctx context.Context, reservation entity.Reservation) (int, error)
 	GetReservationById(ctx context.Context, id int) (entity.Reservation, error)
-	RefundReservationById(ctx context.Context, id int) error
 	RefundReservationByOrderId(ctx context.Context, id int) error
-	RevenueReservationById(ctx context.Context, id int) error
 	RevenueReservationByOrderId(ctx context.Context, orderId int) error
 }
 

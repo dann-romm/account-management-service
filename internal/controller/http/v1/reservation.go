@@ -92,10 +92,7 @@ func (r *reservationRoutes) revenue(c echo.Context) error {
 }
 
 type reservationRefundInput struct {
-	AccountId int `json:"account_id" validate:"required"`
-	ProductId int `json:"product_id" validate:"required"`
-	OrderId   int `json:"order_id" validate:"required"`
-	Amount    int `json:"amount" validate:"required"`
+	OrderId int `json:"order_id" validate:"required"`
 }
 
 func (r *reservationRoutes) refund(c echo.Context) error {
