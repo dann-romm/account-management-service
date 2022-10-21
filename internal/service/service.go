@@ -67,11 +67,32 @@ type Reservation interface {
 	RevenueReservationByOrderId(ctx context.Context, orderId int) error
 }
 
+type OperationHistoryInput struct {
+	AccountId int
+	SortType  string
+	Offset    int
+	Limit     int
+}
+
+type OperationHistoryOutput struct {
+	Amount      int       `json:"amount"`
+	Operation   string    `json:"operation"`
+	Time        time.Time `json:"time"`
+	Product     string    `json:"product,omitempty"`
+	Order       *int      `json:"order,omitempty"`
+	Description string    `json:"description,omitempty"`
+}
+
+type Operation interface {
+	OperationHistory(ctx context.Context, input OperationHistoryInput) ([]OperationHistoryOutput, error)
+}
+
 type Services struct {
 	Auth        Auth
 	Account     Account
 	Product     Product
 	Reservation Reservation
+	Operation   Operation
 }
 
 type ServicesDependencies struct {
@@ -84,9 +105,10 @@ type ServicesDependencies struct {
 
 func NewServices(deps ServicesDependencies) *Services {
 	return &Services{
-		Auth:        NewAuthService(deps.Repos, deps.Hasher, deps.SignKey, deps.TokenTTL),
-		Account:     NewAccountService(deps.Repos),
-		Product:     NewProductService(deps.Repos),
-		Reservation: NewReservationService(deps.Repos),
+		Auth:        NewAuthService(deps.Repos.User, deps.Hasher, deps.SignKey, deps.TokenTTL),
+		Account:     NewAccountService(deps.Repos.Account),
+		Product:     NewProductService(deps.Repos.Product),
+		Reservation: NewReservationService(deps.Repos.Reservation),
+		Operation:   NewOperationService(deps.Repos.Operation, deps.Repos.Product),
 	}
 }

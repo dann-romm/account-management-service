@@ -25,6 +25,7 @@ type Account interface {
 type Product interface {
 	CreateProduct(ctx context.Context, name string) (int, error)
 	GetProductById(ctx context.Context, id int) (entity.Product, error)
+	GetAllProducts(ctx context.Context) ([]entity.Product, error)
 }
 
 type Reservation interface {
@@ -34,11 +35,18 @@ type Reservation interface {
 	RevenueReservationByOrderId(ctx context.Context, orderId int) error
 }
 
+type Operation interface {
+	// GetAllRevenueOperationsGroupedByProductId(ctx context.Context) ([]entity.Operation, error)
+
+	OperationsPagination(ctx context.Context, accountId int, sortType string, offset int, limit int) ([]entity.Operation, []string, error)
+}
+
 type Repositories struct {
 	User
 	Account
 	Product
 	Reservation
+	Operation
 }
 
 func NewRepositories(pg *postgres.Postgres) *Repositories {
@@ -47,5 +55,6 @@ func NewRepositories(pg *postgres.Postgres) *Repositories {
 		Account:     pgdb.NewAccountRepo(pg),
 		Product:     pgdb.NewProductRepo(pg),
 		Reservation: pgdb.NewReservationRepo(pg),
+		Operation:   pgdb.NewOperationRepo(pg),
 	}
 }
