@@ -2,6 +2,7 @@ package pgdb
 
 import (
 	"account-management-service/internal/entity"
+	"account-management-service/internal/repo/repoerrs"
 	"account-management-service/pkg/postgres"
 	"context"
 	"fmt"
@@ -23,8 +24,36 @@ func (r *ReservationRepo) CreateReservation(ctx context.Context, reservation ent
 	}
 	defer func() { _ = tx.Rollback(ctx) }()
 
+	// check if account has enough balance to create reservation
 	sql, args, _ := r.Builder.
-		Insert("reservation").
+		Select("balance").
+		From("accounts").
+		Where("id = ?", reservation.AccountId).
+		ToSql()
+
+	var balance int
+	err = tx.QueryRow(ctx, sql, args...).Scan(&balance)
+	if err != nil {
+		return 0, fmt.Errorf("ReservationRepo.CreateReservation - tx.QueryRow: %v", err)
+	}
+
+	if balance < reservation.Amount {
+		return 0, repoerrs.ErrNotEnoughBalance
+	}
+
+	sql, args, _ = r.Builder.
+		Update("accounts").
+		Set("balance", squirrel.Expr("balance - ?", reservation.Amount)).
+		Where("id = ?", reservation.AccountId).
+		ToSql()
+
+	_, err = tx.Exec(ctx, sql, args...)
+	if err != nil {
+		return 0, fmt.Errorf("ReservationRepo.CreateReservation - tx.Exec: %v", err)
+	}
+
+	sql, args, _ = r.Builder.
+		Insert("reservations").
 		Columns("account_id", "product_id", "order_id", "amount").
 		Values(
 			reservation.AccountId,
@@ -39,17 +68,6 @@ func (r *ReservationRepo) CreateReservation(ctx context.Context, reservation ent
 	err = tx.QueryRow(ctx, sql, args...).Scan(&id)
 	if err != nil {
 		return 0, fmt.Errorf("ReservationRepo.CreateReservation - tx.QueryRow: %v", err)
-	}
-
-	sql, args, _ = r.Builder.
-		Update("account").
-		Set("balance", squirrel.Expr("balance - ?", reservation.Amount)).
-		Where("id = ?", reservation.AccountId).
-		ToSql()
-
-	_, err = tx.Exec(ctx, sql, args...)
-	if err != nil {
-		return 0, fmt.Errorf("ReservationRepo.CreateReservation - tx.Exec: %v", err)
 	}
 
 	sql, args, _ = r.Builder.
@@ -80,7 +98,7 @@ func (r *ReservationRepo) CreateReservation(ctx context.Context, reservation ent
 func (r *ReservationRepo) GetReservationById(ctx context.Context, id int) (entity.Reservation, error) {
 	sql, args, _ := r.Builder.
 		Select("*").
-		From("reservation").
+		From("reservations").
 		Where("id = ?", id).
 		ToSql()
 
@@ -108,7 +126,7 @@ func (r *ReservationRepo) RefundReservationById(ctx context.Context, id int) err
 	defer func() { _ = tx.Rollback(ctx) }()
 
 	sql, args, _ := r.Builder.
-		Delete("reservation").
+		Delete("reservations").
 		Where("id = ?", id).
 		Suffix("RETURNING account_id, product_id, order_id, amount").
 		ToSql()
@@ -125,7 +143,7 @@ func (r *ReservationRepo) RefundReservationById(ctx context.Context, id int) err
 	}
 
 	sql, args, _ = r.Builder.
-		Update("account").
+		Update("accounts").
 		Set("balance", squirrel.Expr("balance + ?", reservation.Amount)).
 		Where("id = ?", reservation.AccountId).
 		ToSql()
@@ -168,7 +186,7 @@ func (r *ReservationRepo) RefundReservationByOrderId(ctx context.Context, orderI
 	defer func() { _ = tx.Rollback(ctx) }()
 
 	sql, args, _ := r.Builder.
-		Delete("reservation").
+		Delete("reservations").
 		Where("order_id = ?", orderId).
 		Suffix("RETURNING account_id, product_id, order_id, amount").
 		ToSql()
@@ -185,7 +203,7 @@ func (r *ReservationRepo) RefundReservationByOrderId(ctx context.Context, orderI
 	}
 
 	sql, args, _ = r.Builder.
-		Update("account").
+		Update("accounts").
 		Set("balance", squirrel.Expr("balance + ?", reservation.Amount)).
 		Where("id = ?", reservation.AccountId).
 		ToSql()
@@ -228,7 +246,7 @@ func (r *ReservationRepo) RevenueReservationById(ctx context.Context, id int) er
 	defer func() { _ = tx.Rollback(ctx) }()
 
 	sql, args, _ := r.Builder.
-		Delete("reservation").
+		Delete("reservations").
 		Where("id = ?", id).
 		Suffix("RETURNING account_id, product_id, order_id, amount").
 		ToSql()
@@ -277,7 +295,7 @@ func (r *ReservationRepo) RevenueReservationByOrderId(ctx context.Context, order
 	defer func() { _ = tx.Rollback(ctx) }()
 
 	sql, args, _ := r.Builder.
-		Delete("reservation").
+		Delete("reservations").
 		Where("order_id = ?", orderId).
 		Suffix("RETURNING account_id, product_id, order_id, amount").
 		ToSql()

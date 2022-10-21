@@ -21,8 +21,6 @@ func NewAccountRepo(pg *postgres.Postgres) *AccountRepo {
 	return &AccountRepo{pg}
 }
 
-// TODO: create with provided account id and balance
-
 func (r *AccountRepo) CreateAccount(ctx context.Context) (int, error) {
 	sql, args, err := r.Builder.
 		Insert("accounts").
@@ -113,7 +111,24 @@ func (r *AccountRepo) Withdraw(ctx context.Context, id, amount int) error {
 	}
 	defer func() { _ = tx.Rollback(ctx) }()
 
+	// check if account has enough balance to withdraw
 	sql, args, _ := r.Builder.
+		Select("balance").
+		From("accounts").
+		Where("id = ?", id).
+		ToSql()
+
+	var balance int
+	err = tx.QueryRow(ctx, sql, args...).Scan(&balance)
+	if err != nil {
+		return fmt.Errorf("AccountRepo.Withdraw - tx.QueryRow: %v", err)
+	}
+
+	if balance < amount {
+		return repoerrs.ErrNotEnoughBalance
+	}
+
+	sql, args, _ = r.Builder.
 		Update("accounts").
 		Set("balance", squirrel.Expr("balance - ?", amount)).
 		Where("id = ?", id).
@@ -150,7 +165,24 @@ func (r *AccountRepo) Transfer(ctx context.Context, from, to, amount int) error 
 	}
 	defer func() { _ = tx.Rollback(ctx) }()
 
+	// check if account 'from' has enough balance to transfer
 	sql, args, _ := r.Builder.
+		Select("balance").
+		From("accounts").
+		Where("id = ?", from).
+		ToSql()
+
+	var balance int
+	err = tx.QueryRow(ctx, sql, args...).Scan(&balance)
+	if err != nil {
+		return fmt.Errorf("AccountRepo.Transfer - tx.QueryRow: %v", err)
+	}
+
+	if balance < amount {
+		return repoerrs.ErrNotEnoughBalance
+	}
+
+	sql, args, _ = r.Builder.
 		Update("accounts").
 		Set("balance", squirrel.Expr("balance - ?", amount)).
 		Where("id = ?", from).
