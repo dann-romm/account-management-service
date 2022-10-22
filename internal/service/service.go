@@ -87,6 +87,7 @@ type OperationHistoryOutput struct {
 type Operation interface {
 	OperationHistory(ctx context.Context, input OperationHistoryInput) ([]OperationHistoryOutput, error)
 	MakeReportLink(ctx context.Context, month, year int) (string, error)
+	MakeReportFile(ctx context.Context, month, year int) ([]byte, error)
 }
 
 type Services struct {

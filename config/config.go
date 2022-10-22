@@ -46,7 +46,7 @@ type (
 	}
 
 	WebAPI struct {
-		GDriveJSONFilePath string `env-required:"true" env:"GOOGLE_DRIVE_JSON_FILE_PATH"`
+		GDriveJSONFilePath string `env-required:"false" env:"GOOGLE_DRIVE_JSON_FILE_PATH"`
 	}
 )
 

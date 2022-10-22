@@ -17,7 +17,8 @@ func newOperationRoutes(g *echo.Group, operationService service.Operation) *oper
 	}
 
 	g.GET("/history", r.getHistory)
-	g.GET("/report", r.getReport)
+	g.GET("/report-link", r.getReportLink)
+	g.GET("/report-file", r.getReportFile)
 
 	return r
 }
@@ -64,7 +65,7 @@ type getReportInput struct {
 	Year  int `json:"year" validate:"required"`
 }
 
-func (r *operationRoutes) getReport(c echo.Context) error {
+func (r *operationRoutes) getReportLink(c echo.Context) error {
 	var input getReportInput
 
 	if err := c.Bind(&input); err != nil {
@@ -87,4 +88,27 @@ func (r *operationRoutes) getReport(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"link": link,
 	})
+}
+
+func (r *operationRoutes) getReportFile(c echo.Context) error {
+	var input getReportInput
+
+	if err := c.Bind(&input); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid request body")
+		return err
+	}
+
+	if err := c.Validate(input); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return err
+	}
+
+	file, err := r.Operation.MakeReportFile(c.Request().Context(), input.Month, input.Year)
+	if err != nil {
+		log.Debugf("error while getting report file: %s", err.Error())
+		newErrorResponse(c, http.StatusInternalServerError, "internal server error")
+		return err
+	}
+
+	return c.Blob(http.StatusOK, "text/csv", file)
 }

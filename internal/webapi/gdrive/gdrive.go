@@ -10,7 +10,8 @@ import (
 )
 
 type GDriveWebAPI struct {
-	d *drive.Service
+	driveService *drive.Service
+	isAvailable  bool
 }
 
 var (
@@ -18,55 +19,64 @@ var (
 )
 
 func New(apiJSONFilePath string) *GDriveWebAPI {
-	d, err := drive.NewService(context.Background(), option.WithCredentialsFile(apiJSONFilePath))
+	if apiJSONFilePath == "" {
+		return &GDriveWebAPI{isAvailable: false}
+	}
+
+	driveService, err := drive.NewService(context.Background(), option.WithCredentialsFile(apiJSONFilePath))
 	if err != nil {
 		panic(err)
 	}
 
 	return &GDriveWebAPI{
-		d: d,
+		driveService: driveService,
+		isAvailable:  true,
 	}
 }
 
-func (g *GDriveWebAPI) UploadCSVFile(ctx context.Context, name string, data []byte) (string, error) {
-	fileId, err := g.getFileIdByName(ctx, name)
+func (w *GDriveWebAPI) IsAvailable() bool {
+	return w.isAvailable
+}
+
+func (w *GDriveWebAPI) UploadCSVFile(ctx context.Context, name string, data []byte) (string, error) {
+	fileId, err := w.getFileIdByName(ctx, name)
 	if err != nil {
 		if !errors.Is(err, ErrFileNotFound) {
-			return "", fmt.Errorf("GDriveWebAPI.UploadCSVFile: g.getFileIdByName: %w", err)
+			return "", fmt.Errorf("GDriveWebAPI.UploadCSVFile: w.getFileIdByName: %w", err)
 		}
 
-		id, err := g.createFile(ctx, name, data)
+		id, err := w.createFile(ctx, name, data)
 		if err != nil {
-			return "", fmt.Errorf("GDriveWebAPI.UploadCSVFile: g.createFile: %w", err)
+			return "", fmt.Errorf("GDriveWebAPI.UploadCSVFile: w.createFile: %w", err)
 		}
 
-		return g.getFileURL(id), nil
+		return w.getFileURL(id), nil
 	}
 
-	err = g.updateFile(ctx, fileId, data)
+	err = w.updateFile(ctx, fileId, data)
 	if err != nil {
-		return "", fmt.Errorf("GDriveWebAPI.UploadCSVFile: g.updateFile: %w", err)
+		return "", fmt.Errorf("GDriveWebAPI.UploadCSVFile: w.updateFile: %w", err)
 	}
 
-	return g.getFileURL(fileId), nil
+	return w.getFileURL(fileId), nil
 }
 
-func (g *GDriveWebAPI) DeleteFile(ctx context.Context, name string) error {
-	fileId, err := g.getFileIdByName(ctx, name)
+func (w *GDriveWebAPI) DeleteFile(ctx context.Context, name string) error {
+	fileId, err := w.getFileIdByName(ctx, name)
 	if err != nil {
-		return fmt.Errorf("GDriveWebAPI.DeleteFile: g.getFileIdByName: %w", err)
+		return fmt.Errorf("GDriveWebAPI.DeleteFile: w.getFileIdByName: %w", err)
 	}
 
-	err = g.d.Files.Delete(fileId).Context(ctx).Do()
+	err = w.driveService.Files.Delete(fileId).Context(ctx).Do()
 	if err != nil {
-		return fmt.Errorf("GDriveWebAPI.DeleteFile: g.d.Files.Delete: %w", err)
+		return fmt.Errorf("GDriveWebAPI.DeleteFile: w.driveService.Files.Delete: %w", err)
 	}
 
 	return nil
 }
 
-func (g *GDriveWebAPI) GetAllFilenames(ctx context.Context) ([]string, error) {
-	files, err := g.getAllFiles(ctx)
+func (w *GDriveWebAPI) GetAllFilenames(ctx context.Context) ([]string, error) {
+	files, err := w.getAllFiles(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +90,7 @@ func (g *GDriveWebAPI) GetAllFilenames(ctx context.Context) ([]string, error) {
 }
 
 // createFile creates a csv file in Google Drive with public read access and returns its ID and URL
-func (g *GDriveWebAPI) createFile(ctx context.Context, name string, content []byte) (string, error) {
+func (w *GDriveWebAPI) createFile(ctx context.Context, name string, content []byte) (string, error) {
 	file := &drive.File{
 		Name:     name,
 		MimeType: "text/csv",
@@ -91,17 +101,17 @@ func (g *GDriveWebAPI) createFile(ctx context.Context, name string, content []by
 		Role: "reader",
 	}
 
-	_, err := g.d.Files.Create(file).Context(ctx).Media(bytes.NewReader(content)).Do()
+	_, err := w.driveService.Files.Create(file).Context(ctx).Media(bytes.NewReader(content)).Do()
 	if err != nil {
 		return "", err
 	}
 
-	fileId, err := g.getFileIdByName(ctx, name)
+	fileId, err := w.getFileIdByName(ctx, name)
 	if err != nil {
 		return "", err
 	}
 
-	_, err = g.d.Permissions.Create(fileId, permissions).Context(ctx).Do()
+	_, err = w.driveService.Permissions.Create(fileId, permissions).Context(ctx).Do()
 	if err != nil {
 		return "", err
 	}
@@ -109,18 +119,18 @@ func (g *GDriveWebAPI) createFile(ctx context.Context, name string, content []by
 	return fileId, nil
 }
 
-func (g *GDriveWebAPI) updateFile(ctx context.Context, id string, content []byte) error {
-	_, err := g.d.Files.Update(id, &drive.File{}).Context(ctx).Media(bytes.NewReader(content)).Do()
+func (w *GDriveWebAPI) updateFile(ctx context.Context, id string, content []byte) error {
+	_, err := w.driveService.Files.Update(id, &drive.File{}).Context(ctx).Media(bytes.NewReader(content)).Do()
 
 	return err
 }
 
-func (g *GDriveWebAPI) getFileURL(id string) string {
+func (w *GDriveWebAPI) getFileURL(id string) string {
 	return fmt.Sprintf("https://drive.google.com/file/d/%s/view?usp=sharing", id)
 }
 
-func (g *GDriveWebAPI) getAllFiles(ctx context.Context) ([]*drive.File, error) {
-	r, err := g.d.Files.List().Context(ctx).Do()
+func (w *GDriveWebAPI) getAllFiles(ctx context.Context) ([]*drive.File, error) {
+	r, err := w.driveService.Files.List().Context(ctx).Do()
 	if err != nil {
 		return nil, err
 	}
@@ -128,8 +138,8 @@ func (g *GDriveWebAPI) getAllFiles(ctx context.Context) ([]*drive.File, error) {
 	return r.Files, nil
 }
 
-func (g *GDriveWebAPI) getFileIdByName(ctx context.Context, name string) (string, error) {
-	files, err := g.getAllFiles(ctx)
+func (w *GDriveWebAPI) getFileIdByName(ctx context.Context, name string) (string, error) {
+	files, err := w.getAllFiles(ctx)
 	if err != nil {
 		return "", err
 	}

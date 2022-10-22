@@ -8,7 +8,6 @@ import (
 	"encoding/csv"
 	"errors"
 	"fmt"
-	log "github.com/sirupsen/logrus"
 	"strconv"
 )
 
@@ -48,9 +47,27 @@ func (s *OperationService) OperationHistory(ctx context.Context, input Operation
 }
 
 func (s *OperationService) MakeReportLink(ctx context.Context, month, year int) (string, error) {
+	if !s.gDrive.IsAvailable() {
+		return "", errors.New("google drive is not available")
+	}
+
+	file, err := s.MakeReportFile(ctx, month, year)
+	if err != nil {
+		return "", err
+	}
+
+	url, err := s.gDrive.UploadCSVFile(ctx, fmt.Sprintf("report_%d_%d.csv", month, year), file)
+	if err != nil {
+		return "", errors.New("failed to upload csv file")
+	}
+
+	return url, nil
+}
+
+func (s *OperationService) MakeReportFile(ctx context.Context, month, year int) ([]byte, error) {
 	products, amounts, err := s.operationRepo.GetAllRevenueOperationsGroupedByProduct(ctx, month, year)
 	if err != nil {
-		return "", errors.New("failed to get revenue operations")
+		return nil, errors.New("failed to get revenue operations")
 	}
 
 	b := bytes.Buffer{}
@@ -59,20 +76,14 @@ func (s *OperationService) MakeReportLink(ctx context.Context, month, year int) 
 	for i := range products {
 		err := w.Write([]string{products[i], strconv.Itoa(amounts[i])})
 		if err != nil {
-			return "", errors.New("failed to write csv")
+			return nil, errors.New("failed to write csv")
 		}
 	}
 
 	w.Flush()
 	if err := w.Error(); err != nil {
-		return "", errors.New("failed to write csv")
+		return nil, errors.New("failed to write csv")
 	}
 
-	url, err := s.gDrive.UploadCSVFile(ctx, fmt.Sprintf("report_%d_%d.csv", month, year), b.Bytes())
-	if err != nil {
-		log.Debugf("failed to upload csv file: %v", err)
-		return "", errors.New("failed to upload csv file")
-	}
-
-	return url, nil
+	return b.Bytes(), nil
 }
