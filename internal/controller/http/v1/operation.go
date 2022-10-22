@@ -7,16 +7,17 @@ import (
 	"net/http"
 )
 
-type historyRoutes struct {
+type operationRoutes struct {
 	service.Operation
 }
 
-func newHistoryRoutes(g *echo.Group, operationService service.Operation) *historyRoutes {
-	r := &historyRoutes{
+func newOperationRoutes(g *echo.Group, operationService service.Operation) *operationRoutes {
+	r := &operationRoutes{
 		Operation: operationService,
 	}
 
 	g.GET("/history", r.getHistory)
+	g.GET("/report", r.getReport)
 
 	return r
 }
@@ -28,7 +29,7 @@ type getHistoryInput struct {
 	Limit     int    `json:"limit,omitempty"`
 }
 
-func (r *historyRoutes) getHistory(c echo.Context) error {
+func (r *operationRoutes) getHistory(c echo.Context) error {
 	var input getHistoryInput
 
 	if err := c.Bind(&input); err != nil {
@@ -55,5 +56,35 @@ func (r *historyRoutes) getHistory(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"operations": operations,
+	})
+}
+
+type getReportInput struct {
+	Month int `json:"month" validate:"required"`
+	Year  int `json:"year" validate:"required"`
+}
+
+func (r *operationRoutes) getReport(c echo.Context) error {
+	var input getReportInput
+
+	if err := c.Bind(&input); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid request body")
+		return err
+	}
+
+	if err := c.Validate(input); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return err
+	}
+
+	link, err := r.Operation.MakeReportLink(c.Request().Context(), input.Month, input.Year)
+	if err != nil {
+		log.Debugf("error while getting report link: %s", err.Error())
+		newErrorResponse(c, http.StatusInternalServerError, "internal server error")
+		return err
+	}
+
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"link": link,
 	})
 }

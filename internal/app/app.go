@@ -5,6 +5,7 @@ import (
 	v1 "account-management-service/internal/controller/http/v1"
 	"account-management-service/internal/repo"
 	"account-management-service/internal/service"
+	"account-management-service/internal/webapi/gdrive"
 	"account-management-service/pkg/hasher"
 	"account-management-service/pkg/httpserver"
 	"account-management-service/pkg/postgres"
@@ -43,6 +44,7 @@ func Run(configPath string) {
 	log.Info("Initializing services...")
 	deps := service.ServicesDependencies{
 		Repos:    repositories,
+		GDrive:   gdrive.New(cfg.WebAPI.GDriveJSONFilePath),
 		Hasher:   hasher.NewSHA1Hasher(cfg.Hasher.Salt),
 		SignKey:  cfg.JWT.SignKey,
 		TokenTTL: cfg.JWT.TokenTTL,

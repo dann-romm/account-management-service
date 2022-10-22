@@ -36,8 +36,7 @@ type Reservation interface {
 }
 
 type Operation interface {
-	// GetAllRevenueOperationsGroupedByProductId(ctx context.Context) ([]entity.Operation, error)
-
+	GetAllRevenueOperationsGroupedByProduct(ctx context.Context, month, year int) ([]string, []int, error)
 	OperationsPagination(ctx context.Context, accountId int, sortType string, offset int, limit int) ([]entity.Operation, []string, error)
 }
 

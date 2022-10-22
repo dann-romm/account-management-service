@@ -23,31 +23,35 @@ func NewOperationRepo(pg *postgres.Postgres) *OperationRepo {
 	return &OperationRepo{pg}
 }
 
-func (r *OperationRepo) GetAllRevenueOperationsGroupedByProductId(ctx context.Context) ([]entity.Operation, error) {
+func (r *OperationRepo) GetAllRevenueOperationsGroupedByProduct(ctx context.Context, month, year int) ([]string, []int, error) {
 	sql, args, _ := r.Builder.
-		Select("product_id", "sum(amount)").
+		Select("products.name", "sum(amount)").
 		From("operations").
-		Where("operation_type = ?", entity.OperationTypeRevenue).
-		GroupBy("product_id").
+		InnerJoin("products on operations.product_id = products.id").
+		Where("operation_type = ? and extract(month from operations.created_at) = ? and extract(year from operations.created_at) = ?", entity.OperationTypeRevenue, month, year).
+		GroupBy("products.name").
 		ToSql()
 
 	rows, err := r.Pool.Query(ctx, sql, args...)
 	if err != nil {
-		return nil, fmt.Errorf("OperationRepo.GetAllRevenueOperationsGroupedByProductId - r.Pool.Query: %v", err)
+		return nil, nil, fmt.Errorf("OperationRepo.GetAllRevenueOperationsGroupedByProductId - r.Pool.Query: %v", err)
 	}
 	defer rows.Close()
 
-	var operations []entity.Operation
+	var productNames []string
+	var amounts []int
 	for rows.Next() {
-		var operation entity.Operation
-		err = rows.Scan(&operation.ProductId, &operation.Amount)
+		var productName string
+		var amount int
+		err = rows.Scan(&productName, &amount)
 		if err != nil {
-			return nil, fmt.Errorf("OperationRepo.GetAllRevenueOperationsGroupedByProductId - rows.Scan: %v", err)
+			return nil, nil, fmt.Errorf("OperationRepo.GetAllRevenueOperationsGroupedByProductId - rows.Scan: %v", err)
 		}
-		operations = append(operations, operation)
+		productNames = append(productNames, productName)
+		amounts = append(amounts, amount)
 	}
 
-	return operations, nil
+	return productNames, amounts, nil
 }
 
 func (r *OperationRepo) OperationsPagination(ctx context.Context, accountId int, sortType string, offset int, limit int) ([]entity.Operation, []string, error) {

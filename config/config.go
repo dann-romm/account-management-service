@@ -15,6 +15,7 @@ type (
 		PG     `yaml:"postgres"`
 		JWT    `yaml:"jwt"`
 		Hasher `yaml:"hasher"`
+		WebAPI `yaml:"webapi"`
 	}
 
 	App struct {
@@ -42,6 +43,10 @@ type (
 
 	Hasher struct {
 		Salt string `env-required:"true" env:"HASHER_SALT"`
+	}
+
+	WebAPI struct {
+		GDriveJSONFilePath string `env-required:"true" env:"GOOGLE_DRIVE_JSON_FILE_PATH"`
 	}
 )
 

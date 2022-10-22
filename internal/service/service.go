@@ -3,6 +3,7 @@ package service
 import (
 	"account-management-service/internal/entity"
 	"account-management-service/internal/repo"
+	"account-management-service/internal/webapi"
 	"account-management-service/pkg/hasher"
 	"context"
 	"time"
@@ -85,6 +86,7 @@ type OperationHistoryOutput struct {
 
 type Operation interface {
 	OperationHistory(ctx context.Context, input OperationHistoryInput) ([]OperationHistoryOutput, error)
+	MakeReportLink(ctx context.Context, month, year int) (string, error)
 }
 
 type Services struct {
@@ -97,6 +99,7 @@ type Services struct {
 
 type ServicesDependencies struct {
 	Repos  *repo.Repositories
+	GDrive webapi.GDrive
 	Hasher hasher.PasswordHasher
 
 	SignKey  string
@@ -109,6 +112,6 @@ func NewServices(deps ServicesDependencies) *Services {
 		Account:     NewAccountService(deps.Repos.Account),
 		Product:     NewProductService(deps.Repos.Product),
 		Reservation: NewReservationService(deps.Repos.Reservation),
-		Operation:   NewOperationService(deps.Repos.Operation, deps.Repos.Product),
+		Operation:   NewOperationService(deps.Repos.Operation, deps.Repos.Product, deps.GDrive),
 	}
 }
