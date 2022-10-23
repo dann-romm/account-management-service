@@ -44,7 +44,7 @@ func (r *UserRepo) CreateUser(ctx context.Context, user entity.User) (int, error
 
 func (r *UserRepo) GetUserByUsernameAndPassword(ctx context.Context, username, password string) (entity.User, error) {
 	sql, args, _ := r.Builder.
-		Select("*").
+		Select("id, username, password, created_at").
 		From("users").
 		Where("username = ? AND password = ?", username, password).
 		ToSql()
@@ -68,7 +68,7 @@ func (r *UserRepo) GetUserByUsernameAndPassword(ctx context.Context, username, p
 
 func (r *UserRepo) GetUserById(ctx context.Context, id int) (entity.User, error) {
 	sql, args, _ := r.Builder.
-		Select("*").
+		Select("id, username, password, created_at").
 		From("users").
 		Where("id = ?", id).
 		ToSql()
@@ -92,7 +92,7 @@ func (r *UserRepo) GetUserById(ctx context.Context, id int) (entity.User, error)
 
 func (r *UserRepo) GetUserByUsername(ctx context.Context, username string) (entity.User, error) {
 	sql, args, _ := r.Builder.
-		Select("*").
+		Select("id, username, password, created_at").
 		From("users").
 		Where("username = ?", username).
 		ToSql()
