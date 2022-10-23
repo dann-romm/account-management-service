@@ -11,6 +11,10 @@ var (
 	ErrCannotParseToken  = fmt.Errorf("cannot parse token")
 )
 
+type errorResponse struct {
+	Message string `json:"message"`
+}
+
 func newErrorResponse(c echo.Context, errStatus int, message string) {
 	err := errors.New(message)
 	_, ok := err.(*echo.HTTPError)

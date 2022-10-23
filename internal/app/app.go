@@ -18,6 +18,23 @@ import (
 	"syscall"
 )
 
+// @title           Swagger Account Management Service
+// @version         1.0
+// @description     This is a sample server Account Management Service server.
+
+// @contact.name   Changaz Danial
+// @contact.email  changaz.d@gmail.com
+
+// @host      localhost:8089
+// @BasePath  /
+
+// @securityDefinitions.basic  BasicAuth
+
+// @securityDefinitions.apikey  JWTAuth
+// @in                          header
+// @name                        Authorization
+// @description					JWT token
+
 func Run(configPath string) {
 	// Configuration
 	cfg, err := config.NewConfig(configPath)

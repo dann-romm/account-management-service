@@ -1,10 +1,12 @@
 package v1
 
 import (
+	_ "account-management-service/docs"
 	"account-management-service/internal/service"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	log "github.com/sirupsen/logrus"
+	echoSwagger "github.com/swaggo/echo-swagger"
 	"os"
 )
 
@@ -15,7 +17,8 @@ func NewRouter(handler *echo.Echo, services *service.Services) {
 	}))
 	handler.Use(middleware.Recover())
 
-	handler.GET("/health", func(c echo.Context) error { return c.String(200, "OK") })
+	handler.GET("/health", func(c echo.Context) error { return c.NoContent(200) })
+	handler.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	auth := handler.Group("/auth")
 	{

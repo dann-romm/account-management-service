@@ -24,7 +24,16 @@ type signUpInput struct {
 	Password string `json:"password" validate:"required,password"`
 }
 
-// регистрация пользователя
+// @Summary Sign up
+// @Description Sign up
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param input body signUpInput true "input"
+// @Success 201 {object} v1.signUp.response
+// @Failure 400 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Router /auth/sign-up [post]
 func (r *authRoutes) signUp(c echo.Context) error {
 	var input signUpInput
 
@@ -51,8 +60,12 @@ func (r *authRoutes) signUp(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusCreated, map[string]interface{}{
-		"id": id,
+	type response struct {
+		Id int `json:"id"`
+	}
+
+	return c.JSON(http.StatusCreated, response{
+		Id: id,
 	})
 }
 
@@ -61,7 +74,16 @@ type signInInput struct {
 	Password string `json:"password" validate:"required,password"`
 }
 
-// аутентификация пользователя
+// @Summary Sign in
+// @Description Sign in
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param input body signInInput true "input"
+// @Success 200 {object} v1.signIn.response
+// @Failure 400 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Router /auth/sign-in [post]
 func (r *authRoutes) signIn(c echo.Context) error {
 	var input signInInput
 
@@ -88,7 +110,11 @@ func (r *authRoutes) signIn(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"token": token,
+	type response struct {
+		Token string `json:"token"`
+	}
+
+	return c.JSON(http.StatusOK, response{
+		Token: token,
 	})
 }

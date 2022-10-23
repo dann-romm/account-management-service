@@ -27,6 +27,16 @@ type reservationCreateInput struct {
 	Amount    int `json:"amount" validate:"required"`
 }
 
+// @Summary Create reservation
+// @Description Create reservation
+// @Tags reservations
+// @Accept json
+// @Produce json
+// @Param input body reservationCreateInput true "input"
+// @Success 201 {object} v1.create.response
+// @Failure 400 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Router /api/v1/reservations/create [post]
 func (r *reservationRoutes) create(c echo.Context) error {
 	var input reservationCreateInput
 
@@ -55,8 +65,12 @@ func (r *reservationRoutes) create(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusCreated, map[string]interface{}{
-		"id": id,
+	type response struct {
+		Id int `json:"id"`
+	}
+
+	return c.JSON(http.StatusCreated, response{
+		Id: id,
 	})
 }
 
@@ -67,6 +81,16 @@ type reservationRevenueInput struct {
 	Amount    int `json:"amount" validate:"required"`
 }
 
+// @Summary Revenue reservation
+// @Description Revenue reservation
+// @Tags reservations
+// @Accept json
+// @Produce json
+// @Param input body reservationRevenueInput true "input"
+// @Success 200
+// @Failure 400 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Router /api/v1/reservations/revenue [post]
 func (r *reservationRoutes) revenue(c echo.Context) error {
 	var input reservationRevenueInput
 
@@ -95,6 +119,16 @@ type reservationRefundInput struct {
 	OrderId int `json:"order_id" validate:"required"`
 }
 
+// @Summary Refund reservation
+// @Description Refund reservation
+// @Tags reservations
+// @Accept json
+// @Produce json
+// @Param input body reservationRefundInput true "input"
+// @Success 200
+// @Failure 400 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Router /api/v1/reservations/refund [post]
 func (r *reservationRoutes) refund(c echo.Context) error {
 	var input reservationRefundInput
 

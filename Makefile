@@ -57,3 +57,6 @@ mockgen: ### generate mock
 	mockgen -source=internal/repo/repo.go       -destination=internal/mocks/repomocks/repo.go       -package=repomocks
 	mockgen -source=internal/webapi/webapi.go   -destination=internal/mocks/webapimocks/webapi.go   -package=webapimocks
 .PHONY: mockgen
+
+swag: ### generate swagger docs
+	swag init -g internal/app/app.go

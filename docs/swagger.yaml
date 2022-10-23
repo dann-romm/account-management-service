@@ -1,0 +1,584 @@
+basePath: /
+definitions:
+  entity.Product:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  service.OperationHistoryOutput:
+    properties:
+      amount:
+        type: integer
+      description:
+        type: string
+      operation:
+        type: string
+      order:
+        type: integer
+      product:
+        type: string
+      time:
+        type: string
+    type: object
+  v1.accountDepositInput:
+    properties:
+      amount:
+        type: integer
+      id:
+        type: integer
+    required:
+    - amount
+    - id
+    type: object
+  v1.accountTransferInput:
+    properties:
+      amount:
+        type: integer
+      from:
+        type: integer
+      to:
+        type: integer
+    required:
+    - amount
+    - from
+    - to
+    type: object
+  v1.accountWithdrawInput:
+    properties:
+      amount:
+        type: integer
+      id:
+        type: integer
+    required:
+    - amount
+    - id
+    type: object
+  v1.create.response:
+    properties:
+      id:
+        type: integer
+    type: object
+  v1.errorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  v1.getById.response:
+    properties:
+      product:
+        $ref: '#/definitions/entity.Product'
+    type: object
+  v1.getHistory.response:
+    properties:
+      operations:
+        items:
+          $ref: '#/definitions/service.OperationHistoryOutput'
+        type: array
+    type: object
+  v1.getHistoryInput:
+    properties:
+      account_id:
+        type: integer
+      limit:
+        type: integer
+      offset:
+        type: integer
+      sort_type:
+        type: string
+    required:
+    - account_id
+    type: object
+  v1.getReportInput:
+    properties:
+      month:
+        type: integer
+      year:
+        type: integer
+    required:
+    - month
+    - year
+    type: object
+  v1.getReportLink.response:
+    properties:
+      link:
+        type: string
+    type: object
+  v1.reservationCreateInput:
+    properties:
+      account_id:
+        type: integer
+      amount:
+        type: integer
+      order_id:
+        type: integer
+      product_id:
+        type: integer
+    required:
+    - account_id
+    - amount
+    - order_id
+    - product_id
+    type: object
+  v1.reservationRefundInput:
+    properties:
+      order_id:
+        type: integer
+    required:
+    - order_id
+    type: object
+  v1.reservationRevenueInput:
+    properties:
+      account_id:
+        type: integer
+      amount:
+        type: integer
+      order_id:
+        type: integer
+      product_id:
+        type: integer
+    required:
+    - account_id
+    - amount
+    - order_id
+    - product_id
+    type: object
+  v1.signIn.response:
+    properties:
+      token:
+        type: string
+    type: object
+  v1.signInInput:
+    properties:
+      password:
+        type: string
+      username:
+        maxLength: 32
+        minLength: 4
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  v1.signUp.response:
+    properties:
+      id:
+        type: integer
+    type: object
+  v1.signUpInput:
+    properties:
+      password:
+        type: string
+      username:
+        maxLength: 32
+        minLength: 4
+        type: string
+    required:
+    - password
+    - username
+    type: object
+host: localhost:8089
+info:
+  contact:
+    email: changaz.d@gmail.com
+    name: Changaz Danial
+  description: This is a sample server Account Management Service server.
+  title: Swagger Account Management Service
+  version: "1.0"
+paths:
+  /api/v1/accounts/create:
+    post:
+      consumes:
+      - application/json
+      description: Create account
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/v1.create.response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+      summary: Create account
+      tags:
+      - accounts
+  /api/v1/accounts/deposit:
+    post:
+      consumes:
+      - application/json
+      description: Deposit
+      parameters:
+      - description: input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/v1.accountDepositInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+      summary: Deposit
+      tags:
+      - accounts
+  /api/v1/accounts/transfer:
+    post:
+      consumes:
+      - application/json
+      description: Transfer
+      parameters:
+      - description: input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/v1.accountTransferInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+      summary: Transfer
+      tags:
+      - accounts
+  /api/v1/accounts/withdraw:
+    post:
+      consumes:
+      - application/json
+      description: Withdraw
+      parameters:
+      - description: input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/v1.accountWithdrawInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+      summary: Withdraw
+      tags:
+      - accounts
+  /api/v1/operations/history:
+    get:
+      consumes:
+      - application/json
+      description: Get history of operations
+      parameters:
+      - description: input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/v1.getHistoryInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.getHistory.response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+      summary: Get history
+      tags:
+      - operations
+  /api/v1/operations/report-file:
+    get:
+      consumes:
+      - application/json
+      description: Get report file
+      parameters:
+      - description: input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/v1.getReportInput'
+      produces:
+      - text/csv
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+      summary: Get report file
+      tags:
+      - operations
+  /api/v1/operations/report-link:
+    get:
+      consumes:
+      - application/json
+      description: Get link to report
+      parameters:
+      - description: input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/v1.getReportInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.getReportLink.response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+      summary: Get report link
+      tags:
+      - operations
+  /api/v1/products/create:
+    post:
+      consumes:
+      - application/json
+      description: Create product
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/v1.create.response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+      summary: Create product
+      tags:
+      - products
+  /api/v1/products/getById:
+    get:
+      consumes:
+      - application/json
+      description: Get product by id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.getById.response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+      summary: Get product by id
+      tags:
+      - products
+  /api/v1/reservations/create:
+    post:
+      consumes:
+      - application/json
+      description: Create reservation
+      parameters:
+      - description: input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/v1.reservationCreateInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/v1.create.response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+      summary: Create reservation
+      tags:
+      - reservations
+  /api/v1/reservations/refund:
+    post:
+      consumes:
+      - application/json
+      description: Refund reservation
+      parameters:
+      - description: input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/v1.reservationRefundInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+      summary: Refund reservation
+      tags:
+      - reservations
+  /api/v1/reservations/revenue:
+    post:
+      consumes:
+      - application/json
+      description: Revenue reservation
+      parameters:
+      - description: input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/v1.reservationRevenueInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+      summary: Revenue reservation
+      tags:
+      - reservations
+  /auth/sign-in:
+    post:
+      consumes:
+      - application/json
+      description: Sign in
+      parameters:
+      - description: input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/v1.signInInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.signIn.response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+      summary: Sign in
+      tags:
+      - auth
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: Sign up
+      parameters:
+      - description: input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/v1.signUpInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/v1.signUp.response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+      summary: Sign up
+      tags:
+      - auth
+securityDefinitions:
+  BasicAuth:
+    type: basic
+  JWTAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

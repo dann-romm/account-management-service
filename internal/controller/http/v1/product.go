@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"account-management-service/internal/entity"
 	"account-management-service/internal/service"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -25,6 +26,15 @@ type productCreateInput struct {
 	Name string `json:"name" validate:"required"`
 }
 
+// @Summary Create product
+// @Description Create product
+// @Tags products
+// @Accept json
+// @Produce json
+// @Success 201 {object} v1.create.response
+// @Failure 400 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Router /api/v1/products/create [post]
 func (r *productRoutes) create(c echo.Context) error {
 	var input productCreateInput
 
@@ -44,8 +54,12 @@ func (r *productRoutes) create(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusCreated, map[string]interface{}{
-		"id": id,
+	type response struct {
+		Id int `json:"id"`
+	}
+
+	return c.JSON(http.StatusCreated, response{
+		Id: id,
 	})
 }
 
@@ -53,6 +67,15 @@ type getByIdInput struct {
 	Id int `json:"id" validate:"required"`
 }
 
+// @Summary Get product by id
+// @Description Get product by id
+// @Tags products
+// @Accept json
+// @Produce json
+// @Success 200 {object} v1.getById.response
+// @Failure 400 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Router /api/v1/products/getById [get]
 func (r *productRoutes) getById(c echo.Context) error {
 	var input getByIdInput
 
@@ -72,7 +95,11 @@ func (r *productRoutes) getById(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"product": product,
+	type response struct {
+		Product entity.Product `json:"product"`
+	}
+
+	return c.JSON(http.StatusOK, response{
+		Product: product,
 	})
 }

@@ -30,6 +30,16 @@ type getHistoryInput struct {
 	Limit     int    `json:"limit,omitempty"`
 }
 
+// @Summary Get history
+// @Description Get history of operations
+// @Tags operations
+// @Accept json
+// @Produce json
+// @Param input body getHistoryInput true "input"
+// @Success 200 {object} v1.getHistory.response
+// @Failure 400 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Router /api/v1/operations/history [get]
 func (r *operationRoutes) getHistory(c echo.Context) error {
 	var input getHistoryInput
 
@@ -55,8 +65,12 @@ func (r *operationRoutes) getHistory(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"operations": operations,
+	type response struct {
+		Operations []service.OperationHistoryOutput `json:"operations"`
+	}
+
+	return c.JSON(http.StatusOK, response{
+		Operations: operations,
 	})
 }
 
@@ -65,6 +79,16 @@ type getReportInput struct {
 	Year  int `json:"year" validate:"required"`
 }
 
+// @Summary Get report link
+// @Description Get link to report
+// @Tags operations
+// @Accept json
+// @Produce json
+// @Param input body getReportInput true "input"
+// @Success 200 {object} v1.getReportLink.response
+// @Failure 400 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Router /api/v1/operations/report-link [get]
 func (r *operationRoutes) getReportLink(c echo.Context) error {
 	var input getReportInput
 
@@ -85,11 +109,25 @@ func (r *operationRoutes) getReportLink(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"link": link,
+	type response struct {
+		Link string `json:"link"`
+	}
+
+	return c.JSON(http.StatusOK, response{
+		Link: link,
 	})
 }
 
+// @Summary Get report file
+// @Description Get report file
+// @Tags operations
+// @Accept json
+// @Produce text/csv
+// @Param input body getReportInput true "input"
+// @Success 200
+// @Failure 400 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Router /api/v1/operations/report-file [get]
 func (r *operationRoutes) getReportFile(c echo.Context) error {
 	var input getReportInput
 

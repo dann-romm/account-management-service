@@ -21,6 +21,15 @@ func newAccountRoutes(g *echo.Group, accountService service.Account) {
 	g.POST("/transfer", r.transfer)
 }
 
+// @Summary Create account
+// @Description Create account
+// @Tags accounts
+// @Accept json
+// @Produce json
+// @Success 201 {object} v1.create.response
+// @Failure 400 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Router /api/v1/accounts/create [post]
 func (r *accountRoutes) create(c echo.Context) error {
 	id, err := r.accountService.CreateAccount(c.Request().Context())
 	if err != nil {
@@ -32,8 +41,12 @@ func (r *accountRoutes) create(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusCreated, map[string]interface{}{
-		"id": id,
+	type response struct {
+		Id int `json:"id"`
+	}
+
+	return c.JSON(http.StatusCreated, response{
+		Id: id,
 	})
 }
 
@@ -42,6 +55,16 @@ type accountDepositInput struct {
 	Amount int `json:"amount" validate:"required"`
 }
 
+// @Summary Deposit
+// @Description Deposit
+// @Tags accounts
+// @Accept json
+// @Produce json
+// @Param input body v1.accountDepositInput true "input"
+// @Success 200
+// @Failure 400 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Router /api/v1/accounts/deposit [post]
 func (r *accountRoutes) deposit(c echo.Context) error {
 	var input accountDepositInput
 
@@ -78,6 +101,16 @@ type accountWithdrawInput struct {
 	Amount int `json:"amount" validate:"required"`
 }
 
+// @Summary Withdraw
+// @Description Withdraw
+// @Tags accounts
+// @Accept json
+// @Produce json
+// @Param input body v1.accountWithdrawInput true "input"
+// @Success 200
+// @Failure 400 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Router /api/v1/accounts/withdraw [post]
 func (r *accountRoutes) withdraw(c echo.Context) error {
 	var input accountWithdrawInput
 
@@ -115,6 +148,16 @@ type accountTransferInput struct {
 	Amount int `json:"amount" validate:"required"`
 }
 
+// @Summary Transfer
+// @Description Transfer
+// @Tags accounts
+// @Accept json
+// @Produce json
+// @Param input body v1.accountTransferInput true "input"
+// @Success 200
+// @Failure 400 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Router /api/v1/accounts/transfer [post]
 func (r *accountRoutes) transfer(c echo.Context) error {
 	var input accountTransferInput
 
