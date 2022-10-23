@@ -36,6 +36,7 @@ type reservationCreateInput struct {
 // @Success 201 {object} v1.create.response
 // @Failure 400 {object} errorResponse
 // @Failure 500 {object} errorResponse
+// @Security JWT
 // @Router /api/v1/reservations/create [post]
 func (r *reservationRoutes) create(c echo.Context) error {
 	var input reservationCreateInput
@@ -90,6 +91,7 @@ type reservationRevenueInput struct {
 // @Success 200
 // @Failure 400 {object} errorResponse
 // @Failure 500 {object} errorResponse
+// @Security JWT
 // @Router /api/v1/reservations/revenue [post]
 func (r *reservationRoutes) revenue(c echo.Context) error {
 	var input reservationRevenueInput
@@ -128,6 +130,7 @@ type reservationRefundInput struct {
 // @Success 200
 // @Failure 400 {object} errorResponse
 // @Failure 500 {object} errorResponse
+// @Security JWT
 // @Router /api/v1/reservations/refund [post]
 func (r *reservationRoutes) refund(c echo.Context) error {
 	var input reservationRefundInput

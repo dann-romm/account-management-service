@@ -29,6 +29,7 @@ func newAccountRoutes(g *echo.Group, accountService service.Account) {
 // @Success 201 {object} v1.create.response
 // @Failure 400 {object} errorResponse
 // @Failure 500 {object} errorResponse
+// @Security JWT
 // @Router /api/v1/accounts/create [post]
 func (r *accountRoutes) create(c echo.Context) error {
 	id, err := r.accountService.CreateAccount(c.Request().Context())
@@ -64,6 +65,7 @@ type accountDepositInput struct {
 // @Success 200
 // @Failure 400 {object} errorResponse
 // @Failure 500 {object} errorResponse
+// @Security JWT
 // @Router /api/v1/accounts/deposit [post]
 func (r *accountRoutes) deposit(c echo.Context) error {
 	var input accountDepositInput
@@ -110,6 +112,7 @@ type accountWithdrawInput struct {
 // @Success 200
 // @Failure 400 {object} errorResponse
 // @Failure 500 {object} errorResponse
+// @Security JWT
 // @Router /api/v1/accounts/withdraw [post]
 func (r *accountRoutes) withdraw(c echo.Context) error {
 	var input accountWithdrawInput
@@ -157,6 +160,7 @@ type accountTransferInput struct {
 // @Success 200
 // @Failure 400 {object} errorResponse
 // @Failure 500 {object} errorResponse
+// @Security JWT
 // @Router /api/v1/accounts/transfer [post]
 func (r *accountRoutes) transfer(c echo.Context) error {
 	var input accountTransferInput

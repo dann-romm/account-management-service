@@ -34,6 +34,7 @@ type productCreateInput struct {
 // @Success 201 {object} v1.create.response
 // @Failure 400 {object} errorResponse
 // @Failure 500 {object} errorResponse
+// @Security JWT
 // @Router /api/v1/products/create [post]
 func (r *productRoutes) create(c echo.Context) error {
 	var input productCreateInput
@@ -75,6 +76,7 @@ type getByIdInput struct {
 // @Success 200 {object} v1.getById.response
 // @Failure 400 {object} errorResponse
 // @Failure 500 {object} errorResponse
+// @Security JWT
 // @Router /api/v1/products/getById [get]
 func (r *productRoutes) getById(c echo.Context) error {
 	var input getByIdInput

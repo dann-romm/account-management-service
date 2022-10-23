@@ -39,6 +39,7 @@ type getHistoryInput struct {
 // @Success 200 {object} v1.getHistory.response
 // @Failure 400 {object} errorResponse
 // @Failure 500 {object} errorResponse
+// @Security JWT
 // @Router /api/v1/operations/history [get]
 func (r *operationRoutes) getHistory(c echo.Context) error {
 	var input getHistoryInput
@@ -88,6 +89,7 @@ type getReportInput struct {
 // @Success 200 {object} v1.getReportLink.response
 // @Failure 400 {object} errorResponse
 // @Failure 500 {object} errorResponse
+// @Security JWT
 // @Router /api/v1/operations/report-link [get]
 func (r *operationRoutes) getReportLink(c echo.Context) error {
 	var input getReportInput
@@ -127,6 +129,7 @@ func (r *operationRoutes) getReportLink(c echo.Context) error {
 // @Success 200
 // @Failure 400 {object} errorResponse
 // @Failure 500 {object} errorResponse
+// @Security JWT
 // @Router /api/v1/operations/report-file [get]
 func (r *operationRoutes) getReportFile(c echo.Context) error {
 	var input getReportInput

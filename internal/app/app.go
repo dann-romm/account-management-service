@@ -18,9 +18,9 @@ import (
 	"syscall"
 )
 
-// @title           Swagger Account Management Service
+// @title           Account Management Service
 // @version         1.0
-// @description     This is a sample server Account Management Service server.
+// @description     This is a service for managing accounts, reservations, products and operations.
 
 // @contact.name   Changaz Danial
 // @contact.email  changaz.d@gmail.com
@@ -28,9 +28,7 @@ import (
 // @host      localhost:8089
 // @BasePath  /
 
-// @securityDefinitions.basic  BasicAuth
-
-// @securityDefinitions.apikey  JWTAuth
+// @securityDefinitions.apikey  JWT
 // @in                          header
 // @name                        Authorization
 // @description					JWT token

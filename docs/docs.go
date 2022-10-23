@@ -21,6 +21,11 @@ const docTemplate = `{
     "paths": {
         "/api/v1/accounts/create": {
             "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "Create account",
                 "consumes": [
                     "application/json"
@@ -56,6 +61,11 @@ const docTemplate = `{
         },
         "/api/v1/accounts/deposit": {
             "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "Deposit",
                 "consumes": [
                     "application/json"
@@ -99,6 +109,11 @@ const docTemplate = `{
         },
         "/api/v1/accounts/transfer": {
             "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "Transfer",
                 "consumes": [
                     "application/json"
@@ -142,6 +157,11 @@ const docTemplate = `{
         },
         "/api/v1/accounts/withdraw": {
             "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "Withdraw",
                 "consumes": [
                     "application/json"
@@ -185,6 +205,11 @@ const docTemplate = `{
         },
         "/api/v1/operations/history": {
             "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "Get history of operations",
                 "consumes": [
                     "application/json"
@@ -231,6 +256,11 @@ const docTemplate = `{
         },
         "/api/v1/operations/report-file": {
             "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "Get report file",
                 "consumes": [
                     "application/json"
@@ -274,6 +304,11 @@ const docTemplate = `{
         },
         "/api/v1/operations/report-link": {
             "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "Get link to report",
                 "consumes": [
                     "application/json"
@@ -320,6 +355,11 @@ const docTemplate = `{
         },
         "/api/v1/products/create": {
             "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "Create product",
                 "consumes": [
                     "application/json"
@@ -355,6 +395,11 @@ const docTemplate = `{
         },
         "/api/v1/products/getById": {
             "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "Get product by id",
                 "consumes": [
                     "application/json"
@@ -390,6 +435,11 @@ const docTemplate = `{
         },
         "/api/v1/reservations/create": {
             "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "Create reservation",
                 "consumes": [
                     "application/json"
@@ -436,6 +486,11 @@ const docTemplate = `{
         },
         "/api/v1/reservations/refund": {
             "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "Refund reservation",
                 "consumes": [
                     "application/json"
@@ -479,6 +534,11 @@ const docTemplate = `{
         },
         "/api/v1/reservations/revenue": {
             "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "Revenue reservation",
                 "consumes": [
                     "application/json"
@@ -884,10 +944,7 @@ const docTemplate = `{
         }
     },
     "securityDefinitions": {
-        "BasicAuth": {
-            "type": "basic"
-        },
-        "JWTAuth": {
+        "JWT": {
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"
@@ -901,8 +958,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8089",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "Swagger Account Management Service",
-	Description:      "This is a sample server Account Management Service server.",
+	Title:            "Account Management Service",
+	Description:      "This is a service for managing accounts, reservations, products and operations.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

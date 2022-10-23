@@ -183,8 +183,9 @@ info:
   contact:
     email: changaz.d@gmail.com
     name: Changaz Danial
-  description: This is a sample server Account Management Service server.
-  title: Swagger Account Management Service
+  description: This is a service for managing accounts, reservations, products and
+    operations.
+  title: Account Management Service
   version: "1.0"
 paths:
   /api/v1/accounts/create:
@@ -207,6 +208,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/v1.errorResponse'
+      security:
+      - JWT: []
       summary: Create account
       tags:
       - accounts
@@ -235,6 +238,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/v1.errorResponse'
+      security:
+      - JWT: []
       summary: Deposit
       tags:
       - accounts
@@ -263,6 +268,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/v1.errorResponse'
+      security:
+      - JWT: []
       summary: Transfer
       tags:
       - accounts
@@ -291,6 +298,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/v1.errorResponse'
+      security:
+      - JWT: []
       summary: Withdraw
       tags:
       - accounts
@@ -321,6 +330,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/v1.errorResponse'
+      security:
+      - JWT: []
       summary: Get history
       tags:
       - operations
@@ -349,6 +360,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/v1.errorResponse'
+      security:
+      - JWT: []
       summary: Get report file
       tags:
       - operations
@@ -379,6 +392,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/v1.errorResponse'
+      security:
+      - JWT: []
       summary: Get report link
       tags:
       - operations
@@ -402,6 +417,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/v1.errorResponse'
+      security:
+      - JWT: []
       summary: Create product
       tags:
       - products
@@ -425,6 +442,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/v1.errorResponse'
+      security:
+      - JWT: []
       summary: Get product by id
       tags:
       - products
@@ -455,6 +474,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/v1.errorResponse'
+      security:
+      - JWT: []
       summary: Create reservation
       tags:
       - reservations
@@ -483,6 +504,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/v1.errorResponse'
+      security:
+      - JWT: []
       summary: Refund reservation
       tags:
       - reservations
@@ -511,6 +534,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/v1.errorResponse'
+      security:
+      - JWT: []
       summary: Revenue reservation
       tags:
       - reservations
@@ -575,9 +600,7 @@ paths:
       tags:
       - auth
 securityDefinitions:
-  BasicAuth:
-    type: basic
-  JWTAuth:
+  JWT:
     in: header
     name: Authorization
     type: apiKey
