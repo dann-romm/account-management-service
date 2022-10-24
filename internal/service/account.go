@@ -1,6 +1,7 @@
 package service
 
 import (
+	"account-management-service/internal/entity"
 	"account-management-service/internal/repo"
 	"account-management-service/internal/repo/repoerrs"
 	"context"
@@ -24,6 +25,10 @@ func (s *AccountService) CreateAccount(ctx context.Context) (int, error) {
 	}
 
 	return id, nil
+}
+
+func (s *AccountService) GetAccountById(ctx context.Context, userId int) (entity.Account, error) {
+	return s.accountRepo.GetAccountById(ctx, userId)
 }
 
 func (s *AccountService) Deposit(ctx context.Context, input AccountDepositInput) error {

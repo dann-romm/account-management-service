@@ -43,6 +43,7 @@ type AccountTransferInput struct {
 
 type Account interface {
 	CreateAccount(ctx context.Context) (int, error)
+	GetAccountById(ctx context.Context, userId int) (entity.Account, error)
 	Deposit(ctx context.Context, input AccountDepositInput) error
 	Withdraw(ctx context.Context, input AccountWithdrawInput) error
 	Transfer(ctx context.Context, input AccountTransferInput) error

@@ -19,6 +19,57 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/accounts/": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Get balance",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "Get balance",
+                "parameters": [
+                    {
+                        "description": "input",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.getBalanceInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.accountRoutes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/accounts/create": {
             "post": {
                 "security": [
@@ -375,7 +426,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/internal_controller_http_v1.productRoutes"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.productRoutes"
                         }
                     },
                     "400": {
@@ -415,7 +466,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/internal_controller_http_v1.productRoutes"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.productRoutes"
                         }
                     },
                     "400": {
@@ -600,7 +651,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_controller_http_v1.signInInput"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.signInInput"
                         }
                     }
                 ],
@@ -608,7 +659,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/internal_controller_http_v1.authRoutes"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.authRoutes"
                         }
                     },
                     "400": {
@@ -646,7 +697,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_controller_http_v1.signUpInput"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.signUpInput"
                         }
                     }
                 ],
@@ -654,7 +705,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/internal_controller_http_v1.authRoutes"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.authRoutes"
                         }
                     },
                     "400": {
@@ -728,6 +779,17 @@ const docTemplate = `{
         },
         "account-management-service_internal_controller_http_v1.authRoutes": {
             "type": "object"
+        },
+        "account-management-service_internal_controller_http_v1.getBalanceInput": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
         },
         "account-management-service_internal_controller_http_v1.getHistoryInput": {
             "type": "object",
@@ -927,6 +989,17 @@ const docTemplate = `{
         },
         "internal_controller_http_v1.authRoutes": {
             "type": "object"
+        },
+        "internal_controller_http_v1.getBalanceInput": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
         },
         "internal_controller_http_v1.getHistoryInput": {
             "type": "object",

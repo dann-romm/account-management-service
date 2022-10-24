@@ -19,6 +19,7 @@ func newAccountRoutes(g *echo.Group, accountService service.Account) {
 	g.POST("/deposit", r.deposit) // POST, а не PUT, потому что неидемпотентно
 	g.POST("/withdraw", r.withdraw)
 	g.POST("/transfer", r.transfer)
+	g.GET("/", r.getBalance)
 }
 
 // @Summary Create account
@@ -191,5 +192,54 @@ func (r *accountRoutes) transfer(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "success",
+	})
+}
+
+type getBalanceInput struct {
+	Id int `json:"id" validate:"required"`
+}
+
+// @Summary Get balance
+// @Description Get balance
+// @Tags accounts
+// @Accept json
+// @Produce json
+// @Param input body v1.getBalanceInput true "input"
+// @Success 200 {object} v1.accountRoutes.getBalance.response
+// @Failure 400 {object} echo.HTTPError
+// @Failure 500 {object} echo.HTTPError
+// @Security JWT
+// @Router /api/v1/accounts/ [get]
+func (r *accountRoutes) getBalance(c echo.Context) error {
+	var input getBalanceInput
+
+	if err := c.Bind(&input); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid request body")
+		return err
+	}
+
+	if err := c.Validate(input); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return err
+	}
+
+	account, err := r.accountService.GetAccountById(c.Request().Context(), input.Id)
+	if err != nil {
+		if err == service.ErrAccountNotFound {
+			newErrorResponse(c, http.StatusBadRequest, err.Error())
+			return err
+		}
+		newErrorResponse(c, http.StatusInternalServerError, "internal server error")
+		return err
+	}
+
+	type response struct {
+		Id      int `json:"id"`
+		Balance int `json:"balance"`
+	}
+
+	return c.JSON(http.StatusOK, response{
+		Id:      account.Id,
+		Balance: account.Balance,
 	})
 }

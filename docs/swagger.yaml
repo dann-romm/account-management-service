@@ -37,6 +37,13 @@ definitions:
     type: object
   account-management-service_internal_controller_http_v1.authRoutes:
     type: object
+  account-management-service_internal_controller_http_v1.getBalanceInput:
+    properties:
+      id:
+        type: integer
+    required:
+    - id
+    type: object
   account-management-service_internal_controller_http_v1.getHistoryInput:
     properties:
       account_id:
@@ -172,6 +179,13 @@ definitions:
     type: object
   internal_controller_http_v1.authRoutes:
     type: object
+  internal_controller_http_v1.getBalanceInput:
+    properties:
+      id:
+        type: integer
+    required:
+    - id
+    type: object
   internal_controller_http_v1.getHistoryInput:
     properties:
       account_id:
@@ -276,6 +290,38 @@ info:
   title: Account Management Service
   version: "1.0"
 paths:
+  /api/v1/accounts/:
+    get:
+      consumes:
+      - application/json
+      description: Get balance
+      parameters:
+      - description: input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/account-management-service_internal_controller_http_v1.getBalanceInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/account-management-service_internal_controller_http_v1.accountRoutes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      security:
+      - JWT: []
+      summary: Get balance
+      tags:
+      - accounts
   /api/v1/accounts/create:
     post:
       consumes:
@@ -496,7 +542,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/internal_controller_http_v1.productRoutes'
+            $ref: '#/definitions/account-management-service_internal_controller_http_v1.productRoutes'
         "400":
           description: Bad Request
           schema:
@@ -521,7 +567,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/internal_controller_http_v1.productRoutes'
+            $ref: '#/definitions/account-management-service_internal_controller_http_v1.productRoutes'
         "400":
           description: Bad Request
           schema:
@@ -638,14 +684,14 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/internal_controller_http_v1.signInInput'
+          $ref: '#/definitions/account-management-service_internal_controller_http_v1.signInInput'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/internal_controller_http_v1.authRoutes'
+            $ref: '#/definitions/account-management-service_internal_controller_http_v1.authRoutes'
         "400":
           description: Bad Request
           schema:
@@ -668,14 +714,14 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/internal_controller_http_v1.signUpInput'
+          $ref: '#/definitions/account-management-service_internal_controller_http_v1.signUpInput'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/internal_controller_http_v1.authRoutes'
+            $ref: '#/definitions/account-management-service_internal_controller_http_v1.authRoutes'
         "400":
           description: Bad Request
           schema:
