@@ -20,7 +20,7 @@
 # Getting Started
 
 Для запуска сервиса с интеграцией с Google Drive необходимо предварительно:
-- Зарегестрировать приложение в Google Cloud Platform: [Документация](https://developers.google.com/workspace/guides/create-project)
+- Зарегистрировать приложение в Google Cloud Platform: [Документация](https://developers.google.com/workspace/guides/create-project)
 - Создать сервисный аккаунт и его секретный ключ: [Документация](https://developers.google.com/workspace/guides/create-credentials)
 - Добавить секретный ключ в директорию secrets
 - Добавить .env файл в директорию с проектом и заполнить его данными из .env.example,
