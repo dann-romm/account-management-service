@@ -34,7 +34,7 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/internal_controller_http_v1.accountRoutes"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.accountRoutes"
                         }
                     },
                     "400": {
@@ -77,7 +77,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_controller_http_v1.accountDepositInput"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.accountDepositInput"
                         }
                     }
                 ],
@@ -125,7 +125,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_controller_http_v1.accountTransferInput"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.accountTransferInput"
                         }
                     }
                 ],
@@ -173,7 +173,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_controller_http_v1.accountWithdrawInput"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.accountWithdrawInput"
                         }
                     }
                 ],
@@ -221,7 +221,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.getHistoryInput"
+                            "$ref": "#/definitions/internal_controller_http_v1.getHistoryInput"
                         }
                     }
                 ],
@@ -229,7 +229,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.operationRoutes"
+                            "$ref": "#/definitions/internal_controller_http_v1.operationRoutes"
                         }
                     },
                     "400": {
@@ -272,7 +272,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.getReportInput"
+                            "$ref": "#/definitions/internal_controller_http_v1.getReportInput"
                         }
                     }
                 ],
@@ -320,7 +320,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.getReportInput"
+                            "$ref": "#/definitions/internal_controller_http_v1.getReportInput"
                         }
                     }
                 ],
@@ -328,7 +328,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.operationRoutes"
+                            "$ref": "#/definitions/internal_controller_http_v1.operationRoutes"
                         }
                     },
                     "400": {
@@ -368,7 +368,7 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.productRoutes"
+                            "$ref": "#/definitions/internal_controller_http_v1.productRoutes"
                         }
                     },
                     "400": {
@@ -408,7 +408,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.productRoutes"
+                            "$ref": "#/definitions/internal_controller_http_v1.productRoutes"
                         }
                     },
                     "400": {
@@ -451,7 +451,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_controller_http_v1.reservationCreateInput"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.reservationCreateInput"
                         }
                     }
                 ],
@@ -459,7 +459,7 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/internal_controller_http_v1.reservationRoutes"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.reservationRoutes"
                         }
                     },
                     "400": {
@@ -502,7 +502,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_controller_http_v1.reservationRefundInput"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.reservationRefundInput"
                         }
                     }
                 ],
@@ -550,7 +550,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_controller_http_v1.reservationRevenueInput"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.reservationRevenueInput"
                         }
                     }
                 ],
@@ -593,7 +593,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.signInInput"
+                            "$ref": "#/definitions/internal_controller_http_v1.signInInput"
                         }
                     }
                 ],
@@ -601,7 +601,53 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.authRoutes"
+                            "$ref": "#/definitions/internal_controller_http_v1.authRoutes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/sign-up": {
+            "post": {
+                "description": "Sign up",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Sign up",
+                "parameters": [
+                    {
+                        "description": "input",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.signUpInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.authRoutes"
                         }
                     },
                     "400": {
@@ -797,6 +843,23 @@
                 }
             }
         },
+        "account-management-service_internal_controller_http_v1.signUpInput": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string",
+                    "maxLength": 32,
+                    "minLength": 4
+                }
+            }
+        },
         "echo.HTTPError": {
             "type": "object",
             "properties": {
@@ -963,6 +1026,23 @@
             "type": "object"
         },
         "internal_controller_http_v1.signInInput": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string",
+                    "maxLength": 32,
+                    "minLength": 4
+                }
+            }
+        },
+        "internal_controller_http_v1.signUpInput": {
             "type": "object",
             "required": [
                 "password",

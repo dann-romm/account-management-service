@@ -41,7 +41,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/internal_controller_http_v1.accountRoutes"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.accountRoutes"
                         }
                     },
                     "400": {
@@ -84,7 +84,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_controller_http_v1.accountDepositInput"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.accountDepositInput"
                         }
                     }
                 ],
@@ -132,7 +132,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_controller_http_v1.accountTransferInput"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.accountTransferInput"
                         }
                     }
                 ],
@@ -180,7 +180,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_controller_http_v1.accountWithdrawInput"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.accountWithdrawInput"
                         }
                     }
                 ],
@@ -228,7 +228,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.getHistoryInput"
+                            "$ref": "#/definitions/internal_controller_http_v1.getHistoryInput"
                         }
                     }
                 ],
@@ -236,7 +236,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.operationRoutes"
+                            "$ref": "#/definitions/internal_controller_http_v1.operationRoutes"
                         }
                     },
                     "400": {
@@ -279,7 +279,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.getReportInput"
+                            "$ref": "#/definitions/internal_controller_http_v1.getReportInput"
                         }
                     }
                 ],
@@ -327,7 +327,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.getReportInput"
+                            "$ref": "#/definitions/internal_controller_http_v1.getReportInput"
                         }
                     }
                 ],
@@ -335,7 +335,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.operationRoutes"
+                            "$ref": "#/definitions/internal_controller_http_v1.operationRoutes"
                         }
                     },
                     "400": {
@@ -375,7 +375,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.productRoutes"
+                            "$ref": "#/definitions/internal_controller_http_v1.productRoutes"
                         }
                     },
                     "400": {
@@ -415,7 +415,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.productRoutes"
+                            "$ref": "#/definitions/internal_controller_http_v1.productRoutes"
                         }
                     },
                     "400": {
@@ -458,7 +458,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_controller_http_v1.reservationCreateInput"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.reservationCreateInput"
                         }
                     }
                 ],
@@ -466,7 +466,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/internal_controller_http_v1.reservationRoutes"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.reservationRoutes"
                         }
                     },
                     "400": {
@@ -509,7 +509,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_controller_http_v1.reservationRefundInput"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.reservationRefundInput"
                         }
                     }
                 ],
@@ -557,7 +557,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_controller_http_v1.reservationRevenueInput"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.reservationRevenueInput"
                         }
                     }
                 ],
@@ -600,7 +600,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.signInInput"
+                            "$ref": "#/definitions/internal_controller_http_v1.signInInput"
                         }
                     }
                 ],
@@ -608,7 +608,53 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.authRoutes"
+                            "$ref": "#/definitions/internal_controller_http_v1.authRoutes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/sign-up": {
+            "post": {
+                "description": "Sign up",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Sign up",
+                "parameters": [
+                    {
+                        "description": "input",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.signUpInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.authRoutes"
                         }
                     },
                     "400": {
@@ -804,6 +850,23 @@ const docTemplate = `{
                 }
             }
         },
+        "account-management-service_internal_controller_http_v1.signUpInput": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string",
+                    "maxLength": 32,
+                    "minLength": 4
+                }
+            }
+        },
         "echo.HTTPError": {
             "type": "object",
             "properties": {
@@ -970,6 +1033,23 @@ const docTemplate = `{
             "type": "object"
         },
         "internal_controller_http_v1.signInInput": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string",
+                    "maxLength": 32,
+                    "minLength": 4
+                }
+            }
+        },
+        "internal_controller_http_v1.signUpInput": {
             "type": "object",
             "required": [
                 "password",
