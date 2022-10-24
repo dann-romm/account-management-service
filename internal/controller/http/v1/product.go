@@ -31,9 +31,9 @@ type productCreateInput struct {
 // @Tags products
 // @Accept json
 // @Produce json
-// @Success 201 {object} v1.create.response
-// @Failure 400 {object} errorResponse
-// @Failure 500 {object} errorResponse
+// @Success 201 {object} v1.productRoutes.create.response
+// @Failure 400 {object} echo.HTTPError
+// @Failure 500 {object} echo.HTTPError
 // @Security JWT
 // @Router /api/v1/products/create [post]
 func (r *productRoutes) create(c echo.Context) error {
@@ -73,9 +73,9 @@ type getByIdInput struct {
 // @Tags products
 // @Accept json
 // @Produce json
-// @Success 200 {object} v1.getById.response
-// @Failure 400 {object} errorResponse
-// @Failure 500 {object} errorResponse
+// @Success 200 {object} v1.productRoutes.getById.response
+// @Failure 400 {object} echo.HTTPError
+// @Failure 500 {object} echo.HTTPError
 // @Security JWT
 // @Router /api/v1/products/getById [get]
 func (r *productRoutes) getById(c echo.Context) error {

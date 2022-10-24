@@ -26,9 +26,9 @@ func newAccountRoutes(g *echo.Group, accountService service.Account) {
 // @Tags accounts
 // @Accept json
 // @Produce json
-// @Success 201 {object} v1.create.response
-// @Failure 400 {object} errorResponse
-// @Failure 500 {object} errorResponse
+// @Success 201 {object} v1.accountRoutes.create.response
+// @Failure 400 {object} echo.HTTPError
+// @Failure 500 {object} echo.HTTPError
 // @Security JWT
 // @Router /api/v1/accounts/create [post]
 func (r *accountRoutes) create(c echo.Context) error {
@@ -63,8 +63,8 @@ type accountDepositInput struct {
 // @Produce json
 // @Param input body v1.accountDepositInput true "input"
 // @Success 200
-// @Failure 400 {object} errorResponse
-// @Failure 500 {object} errorResponse
+// @Failure 400 {object} echo.HTTPError
+// @Failure 500 {object} echo.HTTPError
 // @Security JWT
 // @Router /api/v1/accounts/deposit [post]
 func (r *accountRoutes) deposit(c echo.Context) error {
@@ -110,8 +110,8 @@ type accountWithdrawInput struct {
 // @Produce json
 // @Param input body v1.accountWithdrawInput true "input"
 // @Success 200
-// @Failure 400 {object} errorResponse
-// @Failure 500 {object} errorResponse
+// @Failure 400 {object} echo.HTTPError
+// @Failure 500 {object} echo.HTTPError
 // @Security JWT
 // @Router /api/v1/accounts/withdraw [post]
 func (r *accountRoutes) withdraw(c echo.Context) error {
@@ -158,8 +158,8 @@ type accountTransferInput struct {
 // @Produce json
 // @Param input body v1.accountTransferInput true "input"
 // @Success 200
-// @Failure 400 {object} errorResponse
-// @Failure 500 {object} errorResponse
+// @Failure 400 {object} echo.HTTPError
+// @Failure 500 {object} echo.HTTPError
 // @Security JWT
 // @Router /api/v1/accounts/transfer [post]
 func (r *accountRoutes) transfer(c echo.Context) error {

@@ -30,9 +30,9 @@ type signUpInput struct {
 // @Accept json
 // @Produce json
 // @Param input body signUpInput true "input"
-// @Success 201 {object} v1.signUp.response
-// @Failure 400 {object} errorResponse
-// @Failure 500 {object} errorResponse
+// @Success 201 {object} v1.authRoutes.signUp.response
+// @Failure 400 {object} echo.HTTPError
+// @Failure 500 {object} echo.HTTPError
 // @Router /auth/sign-up [post]
 func (r *authRoutes) signUp(c echo.Context) error {
 	var input signUpInput
@@ -80,9 +80,9 @@ type signInInput struct {
 // @Accept json
 // @Produce json
 // @Param input body signInInput true "input"
-// @Success 200 {object} v1.signIn.response
-// @Failure 400 {object} errorResponse
-// @Failure 500 {object} errorResponse
+// @Success 200 {object} v1.authRoutes.signIn.response
+// @Failure 400 {object} echo.HTTPError
+// @Failure 500 {object} echo.HTTPError
 // @Router /auth/sign-in [post]
 func (r *authRoutes) signIn(c echo.Context) error {
 	var input signInInput

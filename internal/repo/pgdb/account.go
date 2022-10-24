@@ -22,14 +22,14 @@ func NewAccountRepo(pg *postgres.Postgres) *AccountRepo {
 }
 
 func (r *AccountRepo) CreateAccount(ctx context.Context) (int, error) {
-	sql, args, err := r.Builder.
+	sql, args, _ := r.Builder.
 		Insert("accounts").
 		Values(squirrel.Expr("DEFAULT")).
 		Suffix("RETURNING id").
 		ToSql()
 
 	var id int
-	err = r.Pool.QueryRow(ctx, sql, args...).Scan(&id)
+	err := r.Pool.QueryRow(ctx, sql, args...).Scan(&id)
 	if err != nil {
 		log.Debugf("err: %v", err)
 		var pgErr *pgconn.PgError

@@ -59,4 +59,4 @@ mockgen: ### generate mock
 .PHONY: mockgen
 
 swag: ### generate swagger docs
-	swag init -g internal/app/app.go
+	swag init -g internal/app/app.go --parseInternal --parseDependency

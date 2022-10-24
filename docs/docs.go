@@ -41,19 +41,19 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/v1.create.response"
+                            "$ref": "#/definitions/internal_controller_http_v1.accountRoutes"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     }
                 }
@@ -84,7 +84,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/v1.accountDepositInput"
+                            "$ref": "#/definitions/internal_controller_http_v1.accountDepositInput"
                         }
                     }
                 ],
@@ -95,13 +95,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     }
                 }
@@ -132,7 +132,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/v1.accountTransferInput"
+                            "$ref": "#/definitions/internal_controller_http_v1.accountTransferInput"
                         }
                     }
                 ],
@@ -143,13 +143,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     }
                 }
@@ -180,7 +180,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/v1.accountWithdrawInput"
+                            "$ref": "#/definitions/internal_controller_http_v1.accountWithdrawInput"
                         }
                     }
                 ],
@@ -191,13 +191,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     }
                 }
@@ -228,7 +228,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/v1.getHistoryInput"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.getHistoryInput"
                         }
                     }
                 ],
@@ -236,19 +236,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/v1.getHistory.response"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.operationRoutes"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     }
                 }
@@ -279,7 +279,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/v1.getReportInput"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.getReportInput"
                         }
                     }
                 ],
@@ -290,13 +290,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     }
                 }
@@ -327,7 +327,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/v1.getReportInput"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.getReportInput"
                         }
                     }
                 ],
@@ -335,19 +335,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/v1.getReportLink.response"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.operationRoutes"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     }
                 }
@@ -375,19 +375,19 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/v1.create.response"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.productRoutes"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     }
                 }
@@ -415,19 +415,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/v1.getById.response"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.productRoutes"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     }
                 }
@@ -458,7 +458,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/v1.reservationCreateInput"
+                            "$ref": "#/definitions/internal_controller_http_v1.reservationCreateInput"
                         }
                     }
                 ],
@@ -466,19 +466,19 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/v1.create.response"
+                            "$ref": "#/definitions/internal_controller_http_v1.reservationRoutes"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     }
                 }
@@ -509,7 +509,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/v1.reservationRefundInput"
+                            "$ref": "#/definitions/internal_controller_http_v1.reservationRefundInput"
                         }
                     }
                 ],
@@ -520,13 +520,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     }
                 }
@@ -557,7 +557,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/v1.reservationRevenueInput"
+                            "$ref": "#/definitions/internal_controller_http_v1.reservationRevenueInput"
                         }
                     }
                 ],
@@ -568,13 +568,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     }
                 }
@@ -600,7 +600,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/v1.signInInput"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.signInInput"
                         }
                     }
                 ],
@@ -608,65 +608,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/v1.signIn.response"
+                            "$ref": "#/definitions/account-management-service_internal_controller_http_v1.authRoutes"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/auth/sign-up": {
-            "post": {
-                "description": "Sign up",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "auth"
-                ],
-                "summary": "Sign up",
-                "parameters": [
-                    {
-                        "description": "input",
-                        "name": "input",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/v1.signUpInput"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/v1.signUp.response"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/v1.errorResponse"
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     }
                 }
@@ -674,41 +628,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "entity.Product": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "service.OperationHistoryOutput": {
-            "type": "object",
-            "properties": {
-                "amount": {
-                    "type": "integer"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "operation": {
-                    "type": "string"
-                },
-                "order": {
-                    "type": "integer"
-                },
-                "product": {
-                    "type": "string"
-                },
-                "time": {
-                    "type": "string"
-                }
-            }
-        },
-        "v1.accountDepositInput": {
+        "account-management-service_internal_controller_http_v1.accountDepositInput": {
             "type": "object",
             "required": [
                 "amount",
@@ -723,7 +643,10 @@ const docTemplate = `{
                 }
             }
         },
-        "v1.accountTransferInput": {
+        "account-management-service_internal_controller_http_v1.accountRoutes": {
+            "type": "object"
+        },
+        "account-management-service_internal_controller_http_v1.accountTransferInput": {
             "type": "object",
             "required": [
                 "amount",
@@ -742,7 +665,7 @@ const docTemplate = `{
                 }
             }
         },
-        "v1.accountWithdrawInput": {
+        "account-management-service_internal_controller_http_v1.accountWithdrawInput": {
             "type": "object",
             "required": [
                 "amount",
@@ -757,42 +680,10 @@ const docTemplate = `{
                 }
             }
         },
-        "v1.create.response": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                }
-            }
+        "account-management-service_internal_controller_http_v1.authRoutes": {
+            "type": "object"
         },
-        "v1.errorResponse": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "v1.getById.response": {
-            "type": "object",
-            "properties": {
-                "product": {
-                    "$ref": "#/definitions/entity.Product"
-                }
-            }
-        },
-        "v1.getHistory.response": {
-            "type": "object",
-            "properties": {
-                "operations": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/service.OperationHistoryOutput"
-                    }
-                }
-            }
-        },
-        "v1.getHistoryInput": {
+        "account-management-service_internal_controller_http_v1.getHistoryInput": {
             "type": "object",
             "required": [
                 "account_id"
@@ -812,7 +703,7 @@ const docTemplate = `{
                 }
             }
         },
-        "v1.getReportInput": {
+        "account-management-service_internal_controller_http_v1.getReportInput": {
             "type": "object",
             "required": [
                 "month",
@@ -827,15 +718,16 @@ const docTemplate = `{
                 }
             }
         },
-        "v1.getReportLink.response": {
+        "account-management-service_internal_controller_http_v1.operationRoutes": {
             "type": "object",
             "properties": {
-                "link": {
-                    "type": "string"
-                }
+                "service.Operation": {}
             }
         },
-        "v1.reservationCreateInput": {
+        "account-management-service_internal_controller_http_v1.productRoutes": {
+            "type": "object"
+        },
+        "account-management-service_internal_controller_http_v1.reservationCreateInput": {
             "type": "object",
             "required": [
                 "account_id",
@@ -858,7 +750,7 @@ const docTemplate = `{
                 }
             }
         },
-        "v1.reservationRefundInput": {
+        "account-management-service_internal_controller_http_v1.reservationRefundInput": {
             "type": "object",
             "required": [
                 "order_id"
@@ -869,7 +761,7 @@ const docTemplate = `{
                 }
             }
         },
-        "v1.reservationRevenueInput": {
+        "account-management-service_internal_controller_http_v1.reservationRevenueInput": {
             "type": "object",
             "required": [
                 "account_id",
@@ -892,15 +784,10 @@ const docTemplate = `{
                 }
             }
         },
-        "v1.signIn.response": {
-            "type": "object",
-            "properties": {
-                "token": {
-                    "type": "string"
-                }
-            }
+        "account-management-service_internal_controller_http_v1.reservationRoutes": {
+            "type": "object"
         },
-        "v1.signInInput": {
+        "account-management-service_internal_controller_http_v1.signInInput": {
             "type": "object",
             "required": [
                 "password",
@@ -917,15 +804,172 @@ const docTemplate = `{
                 }
             }
         },
-        "v1.signUp.response": {
+        "echo.HTTPError": {
             "type": "object",
             "properties": {
+                "message": {}
+            }
+        },
+        "internal_controller_http_v1.accountDepositInput": {
+            "type": "object",
+            "required": [
+                "amount",
+                "id"
+            ],
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
                 "id": {
                     "type": "integer"
                 }
             }
         },
-        "v1.signUpInput": {
+        "internal_controller_http_v1.accountRoutes": {
+            "type": "object"
+        },
+        "internal_controller_http_v1.accountTransferInput": {
+            "type": "object",
+            "required": [
+                "amount",
+                "from",
+                "to"
+            ],
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "from": {
+                    "type": "integer"
+                },
+                "to": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_controller_http_v1.accountWithdrawInput": {
+            "type": "object",
+            "required": [
+                "amount",
+                "id"
+            ],
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_controller_http_v1.authRoutes": {
+            "type": "object"
+        },
+        "internal_controller_http_v1.getHistoryInput": {
+            "type": "object",
+            "required": [
+                "account_id"
+            ],
+            "properties": {
+                "account_id": {
+                    "type": "integer"
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "offset": {
+                    "type": "integer"
+                },
+                "sort_type": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_controller_http_v1.getReportInput": {
+            "type": "object",
+            "required": [
+                "month",
+                "year"
+            ],
+            "properties": {
+                "month": {
+                    "type": "integer"
+                },
+                "year": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_controller_http_v1.operationRoutes": {
+            "type": "object",
+            "properties": {
+                "service.Operation": {}
+            }
+        },
+        "internal_controller_http_v1.productRoutes": {
+            "type": "object"
+        },
+        "internal_controller_http_v1.reservationCreateInput": {
+            "type": "object",
+            "required": [
+                "account_id",
+                "amount",
+                "order_id",
+                "product_id"
+            ],
+            "properties": {
+                "account_id": {
+                    "type": "integer"
+                },
+                "amount": {
+                    "type": "integer"
+                },
+                "order_id": {
+                    "type": "integer"
+                },
+                "product_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_controller_http_v1.reservationRefundInput": {
+            "type": "object",
+            "required": [
+                "order_id"
+            ],
+            "properties": {
+                "order_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_controller_http_v1.reservationRevenueInput": {
+            "type": "object",
+            "required": [
+                "account_id",
+                "amount",
+                "order_id",
+                "product_id"
+            ],
+            "properties": {
+                "account_id": {
+                    "type": "integer"
+                },
+                "amount": {
+                    "type": "integer"
+                },
+                "order_id": {
+                    "type": "integer"
+                },
+                "product_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_controller_http_v1.reservationRoutes": {
+            "type": "object"
+        },
+        "internal_controller_http_v1.signInInput": {
             "type": "object",
             "required": [
                 "password",
